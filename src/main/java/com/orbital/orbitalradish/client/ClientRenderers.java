@@ -1,30 +1,31 @@
-package com.orbital.orbitalradish.entity;
+package com.orbital.orbitalradish.client;
 
+import com.orbital.orbitalradish.ModEntities;
 import com.orbital.orbitalradish.OrbitalRadishMod;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.Arrow;
-import net.minecraft.world.entity.projectile.ItemSupplier;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
+import com.orbital.orbitalradish.entity.RadishArrowEntity; // ✅ MISSING IMPORT
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
-public class RadishArrowEntity extends Arrow implements ItemSupplier {
+@Mod.EventBusSubscriber(
+        modid = OrbitalRadishMod.MODID,
+        bus = Mod.EventBusSubscriber.Bus.MOD,
+        value = Dist.CLIENT
+)
+public class ClientRenderers {
 
-    public RadishArrowEntity(EntityType<? extends Arrow> type, Level level) {
-        super(type, level);
-    }
-
-    public RadishArrowEntity(Level level, LivingEntity shooter) {
-        super(level, shooter);
-    }
-
-    @Override
-    public ItemStack getItem() {
-        return new ItemStack(OrbitalRadishMod.RADISH_ARROW.get());
-    }
-
-    @Override
-    protected ItemStack getPickupItem() {
-        return new ItemStack(OrbitalRadishMod.RADISH_ARROW.get());
+    @SubscribeEvent
+    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(
+                ModEntities.RADISH_ARROW.get(),
+                new EntityRendererProvider<RadishArrowEntity>() {
+                    @Override
+                    public RadishArrowRenderer create(EntityRendererProvider.Context context) {
+                        return new RadishArrowRenderer(context);
+                    }
+                }
+        );
     }
 }

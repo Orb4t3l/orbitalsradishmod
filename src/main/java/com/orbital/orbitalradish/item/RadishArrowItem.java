@@ -1,7 +1,6 @@
 package com.orbital.orbitalradish.item;
 
 import com.orbital.orbitalradish.entity.RadishArrowEntity;
-import com.orbital.orbitalradish.ModEntities;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ArrowItem;
@@ -15,7 +14,7 @@ public class RadishArrowItem extends ArrowItem {
 
     @Override
     public Arrow createArrow(Level level, ItemStack stack, LivingEntity shooter) {
-        // Use the (Level, LivingEntity) constructor so it uses the shooter/owner properly
+        // create using (level, shooter) so the shooter/owner is set correctly
         return new RadishArrowEntity(level, shooter);
     }
 }
