@@ -29,6 +29,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
+import com.orbital.orbitalradish.item.RadishStickItem;
 
 @Mod(OrbitalRadishMod.MODID)
 public class OrbitalRadishMod {
@@ -46,19 +47,16 @@ public class OrbitalRadishMod {
             () -> new RadishCrop(BlockBehaviour.Properties.copy(Blocks.WHEAT)));
 
     // Radish item: edible AND placeable (ItemNameBlockItem ties the item to placing the crop block)
-// nutrition 2 -> 1 full hunger bar (2 hunger points)
     public static final RegistryObject<Item> RADISH = ITEMS.register("radish",
             () -> new ItemNameBlockItem(RADISH_CROP.get(),
                     new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).build())));
 
-    // Cooked radish: nutrition 6 -> 3 full hunger bars (6 hunger points)
     public static final RegistryObject<Item> COOKED_RADISH = ITEMS.register("cooked_radish",
             () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationMod(0.8f).build())));
 
-    // Register radish arrow item (so it exists in inventory and as pickup)
-// OrbitalRadishMod.java (or your items registration class)
-    public static final RegistryObject<net.minecraft.world.item.Item> RADISH_ARROW = ITEMS.register("radish_arrow",
-            () -> new com.orbital.orbitalradish.item.RadishArrowItem(new net.minecraft.world.item.Item.Properties()));
+    public static final RegistryObject<Item> RADISH_ARROW = ITEMS.register("radish_arrow",
+            () -> new com.orbital.orbitalradish.item.RadishArrowItem(new Item.Properties()));
+
 
 
     public static final RegistryObject<Block> RADISH_BLOCK = BLOCKS.register("radish_block",
@@ -67,9 +65,8 @@ public class OrbitalRadishMod {
     public static final RegistryObject<Item> RADISH_BLOCK_ITEM = ITEMS.register("radish_block",
             () -> new BlockItem(RADISH_BLOCK.get(), new Item.Properties()));
 
-    // Radish bow (plain BowItem; no .tab on Properties)
     public static final RegistryObject<Item> RADISH_STICK = ITEMS.register("radish_stick",
-            () -> new BowItem(new Item.Properties().durability(384)));
+            () -> new RadishStickItem(new Item.Properties().durability(384)));
 
 
     public OrbitalRadishMod(FMLJavaModLoadingContext context) {

@@ -1,6 +1,7 @@
 
 package com.orbital.orbitalradish;
 
+import com.orbital.orbitalradish.entity.RadishArrowEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.DeferredRegister;
