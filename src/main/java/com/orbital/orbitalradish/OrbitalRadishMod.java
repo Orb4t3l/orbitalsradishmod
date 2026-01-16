@@ -59,6 +59,9 @@ public class OrbitalRadishMod {
     public static final RegistryObject<Item> RADISH_ARROW = ITEMS.register("radish_arrow",
             () -> new com.orbital.orbitalradish.item.RadishArrowItem(new Item.Properties()));
 
+    public static final RegistryObject<Item> RADISH_LEAF = ITEMS.register("radish_leaf",
+            () -> new Item(new Item.Properties()));
+
 
 
     public static final RegistryObject<Block> RADISH_BLOCK = BLOCKS.register("radish_block",
@@ -111,9 +114,6 @@ public class OrbitalRadishMod {
             event.accept(RADISH_BLOCK_ITEM.get());
 
         }
-        if (event.getTabKey() == CreativeModeTabs.FOOD_AND_DRINKS) {
-            event.accept(RADISH.get());
-        }
         if (event.getTabKey() == CreativeModeTabs.COMBAT) {
             event.accept(RADISH_STICK.get());
 
@@ -121,6 +121,7 @@ public class OrbitalRadishMod {
         if (event.getTabKey() == CreativeModeTabs.FOOD_AND_DRINKS) {
             event.accept(RADISH.get());
             event.accept(COOKED_RADISH.get());
+            event.accept(RADISH_LEAF.get());
         }
 
     }
