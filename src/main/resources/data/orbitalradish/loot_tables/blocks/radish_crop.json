@@ -2,6 +2,25 @@
   "type": "minecraft:block",
   "pools": [
     {
+      "name": "radish_unripe",
+      "conditions": [
+        {
+          "condition": "minecraft:inverse",
+          "term": {
+            "condition": "minecraft:block_state_property",
+            "block": "orbitalradish:radish_crop",
+            "properties": { "age": "7" }
+          }
+        }
+      ],
+      "rolls": 1,
+      "entries": [
+        { "type": "minecraft:item", "name": "orbitalradish:radish" }
+      ]
+    },
+
+    {
+      "name": "radish_ripe_base",
       "conditions": [
         {
           "condition": "minecraft:block_state_property",
@@ -15,32 +34,46 @@
           "type": "minecraft:item",
           "name": "orbitalradish:radish",
           "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": { "min": 1, "max": 4 }
-            }
+            { "function": "minecraft:set_count", "count": 2 }
           ]
         }
       ]
     },
+
     {
+      "name": "radish_ripe_extra_1",
       "conditions": [
         {
-          "condition": "minecraft:inverse",
-          "term": {
-            "condition": "minecraft:block_state_property",
-            "block": "orbitalradish:radish_crop",
-            "properties": { "age": "7" }
-          }
+          "condition": "minecraft:block_state_property",
+          "block": "orbitalradish:radish_crop",
+          "properties": { "age": "7" }
+        },
+        {
+          "condition": "minecraft:random_chance_with_looting",
+          "chance": 0.30,
+          "looting_multiplier": 0.02
         }
       ],
       "rolls": 1,
-      "entries": [
+      "entries": [ { "type": "minecraft:item", "name": "orbitalradish:radish" } ]
+    },
+
+    {
+      "name": "radish_ripe_extra_2",
+      "conditions": [
         {
-          "type": "minecraft:item",
-          "name": "orbitalradish:radish"
+          "condition": "minecraft:block_state_property",
+          "block": "orbitalradish:radish_crop",
+          "properties": { "age": "7" }
+        },
+        {
+          "condition": "minecraft:random_chance_with_looting",
+          "chance": 0.08,
+          "looting_multiplier": 0.01
         }
-      ]
+      ],
+      "rolls": 1,
+      "entries": [ { "type": "minecraft:item", "name": "orbitalradish:radish" } ]
     }
   ]
 }

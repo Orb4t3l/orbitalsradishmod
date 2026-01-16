@@ -30,6 +30,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 import com.orbital.orbitalradish.item.RadishStickItem;
+import net.minecraft.world.level.block.ComposterBlock;
+
 
 @Mod(OrbitalRadishMod.MODID)
 public class OrbitalRadishMod {
@@ -89,6 +91,18 @@ public class OrbitalRadishMod {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         LOGGER.info("OrbitalRadish: common setup");
+
+        // run as queued work so it executes safely after registries are ready
+        event.enqueueWork(() -> {
+            // add fresh radishes to the composter at a modest chance
+            ComposterBlock.COMPOSTABLES.put(RADISH.get(), 0.3F);
+
+            // cooked radish should compost more reliably (optional)
+            ComposterBlock.COMPOSTABLES.put(COOKED_RADISH.get(), 0.65F);
+
+            // if you also want the radish item used as arrow visual to be compostable:
+            // ComposterBlock.COMPOSTABLES.put(RADISH_ARROW.get(), 0.3F);
+        });
     }
 
     // This is how you add items to vanilla tabs in 1.20.x (no .tab on Item.Properties)

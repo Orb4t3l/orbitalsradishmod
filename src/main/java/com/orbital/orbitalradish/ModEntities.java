@@ -15,15 +15,14 @@ public final class ModEntities {
 
     public static final RegistryObject<EntityType<RadishArrowEntity>> RADISH_ARROW =
             ENTITIES.register("radish_arrow",
-                    () -> EntityType.Builder.of(
-                                    (EntityType<RadishArrowEntity> type, Level level) ->
-                                            new RadishArrowEntity(type, level),
-                                    MobCategory.MISC
-                            )
+                    () -> EntityType.Builder
+                            .<RadishArrowEntity>of(RadishArrowEntity::new, MobCategory.MISC)
                             .sized(0.5F, 0.5F)
-                            .clientTrackingRange(8)
+                            .clientTrackingRange(4)
+                            .updateInterval(20)
                             .build("radish_arrow")
             );
+
 
     private ModEntities() {}
 }

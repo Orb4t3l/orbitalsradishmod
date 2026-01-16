@@ -1,34 +1,36 @@
 package com.orbital.orbitalradish.entity;
 
-import com.orbital.orbitalradish.OrbitalRadishMod;
+import com.orbital.orbitalradish.ModEntities;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public class RadishArrowEntity extends Arrow implements ItemSupplier {
+public class RadishArrowEntity extends AbstractArrow implements ItemSupplier {
 
-    // Called by EntityType builder
-    public RadishArrowEntity(EntityType<? extends Arrow> type, Level level) {
+    private ItemStack itemStack = ItemStack.EMPTY;
+
+    // Used by registration factory (EntityType.Builder)
+    public RadishArrowEntity(EntityType<? extends AbstractArrow> type, Level level) {
         super(type, level);
     }
 
-    // Used when creating the arrow from code (shooter + level)
-    public RadishArrowEntity(Level level, LivingEntity shooter) {
-        super(level, shooter);
+    // Convenience constructor used by RadishArrowItem.createArrow and RadishStickItem
+    public RadishArrowEntity(Level level, LivingEntity shooter, ItemStack stack) {
+        super(ModEntities.RADISH_ARROW.get(), level); // ensure matches your ModEntities entry
+        this.itemStack = stack == null ? ItemStack.EMPTY : stack.copy();
+        this.setOwner(shooter);
     }
 
-    // ItemSupplier: tells the renderer which item to draw for the projectile
     @Override
     public ItemStack getItem() {
-        return new ItemStack(OrbitalRadishMod.RADISH_ARROW.get());
+        return itemStack;
     }
 
-    // What item is dropped/picked up when the arrow is on ground
     @Override
     protected ItemStack getPickupItem() {
-        return new ItemStack(OrbitalRadishMod.RADISH_ARROW.get());
+        return itemStack.copy();
     }
 }
