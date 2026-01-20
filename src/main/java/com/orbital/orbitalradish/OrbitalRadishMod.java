@@ -51,10 +51,10 @@ public class OrbitalRadishMod {
     // Radish item: edible AND placeable (ItemNameBlockItem ties the item to placing the crop block)
     public static final RegistryObject<Item> RADISH = ITEMS.register("radish",
             () -> new ItemNameBlockItem(RADISH_CROP.get(),
-                    new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).build())));
+                    new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.15f).build())));
 
     public static final RegistryObject<Item> COOKED_RADISH = ITEMS.register("cooked_radish",
-            () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationMod(0.8f).build())));
+            () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationMod(0.4f).build())));
 
     public static final RegistryObject<Item> RADISH_ARROW = ITEMS.register("radish_arrow",
             () -> new com.orbital.orbitalradish.item.RadishArrowItem(new Item.Properties()));
@@ -71,7 +71,7 @@ public class OrbitalRadishMod {
             () -> new BlockItem(RADISH_BLOCK.get(), new Item.Properties()));
 
     public static final RegistryObject<Item> RADISH_STICK = ITEMS.register("radish_stick",
-            () -> new RadishStickItem(new Item.Properties().durability(384)));
+            () -> new RadishStickItem(new Item.Properties().durability(99999999)));
 
 
     public OrbitalRadishMod(FMLJavaModLoadingContext context) {
