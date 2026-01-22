@@ -49,9 +49,6 @@ public class OrbitalRadishMod {
             () -> new RadishCrop(BlockBehaviour.Properties.copy(Blocks.WHEAT)));
 
     // Radish item: edible AND placeable (ItemNameBlockItem ties the item to placing the crop block)
-    public static final RegistryObject<Item> RADISH = ITEMS.register("radish",
-            () -> new ItemNameBlockItem(RADISH_CROP.get(),
-                    new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.15f).build())));
 
     public static final RegistryObject<Item> COOKED_RADISH = ITEMS.register("cooked_radish",
             () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationMod(0.4f).build())));
@@ -70,6 +67,13 @@ public class OrbitalRadishMod {
     public static final RegistryObject<Item> RADISH_BLOCK_ITEM = ITEMS.register("radish_block",
             () -> new BlockItem(RADISH_BLOCK.get(), new Item.Properties()));
 
+
+    public static final RegistryObject<Block> DOUBLE_COMPRESSED_RADISH_BLOCK = BLOCKS.register("double_compressed_radish_block",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.DIRT).mapColor(MapColor.PLANT)));
+
+    public static final RegistryObject<Item> DOUBLE_COMPRESSED_RADISH_BLOCK_ITEM = ITEMS.register("double_compressed_radish_block",
+            () -> new BlockItem(DOUBLE_COMPRESSED_RADISH_BLOCK.get(), new Item.Properties()));
+
     public static final RegistryObject<Item> RADISH_STICK = ITEMS.register("radish_stick",
             () -> new RadishStickItem(new Item.Properties().durability(99999999)));
 
@@ -79,8 +83,13 @@ public class OrbitalRadishMod {
 
         modEventBus.addListener(this::commonSetup);
 
+        // register blocks first
         BLOCKS.register(modEventBus);
-        ITEMS.register(modEventBus);
+
+        // register the centralized items register (only one)
+        ModItems.ITEMS.register(modEventBus);
+
+        // other registries
         ModEntities.ENTITIES.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
 
@@ -92,13 +101,15 @@ public class OrbitalRadishMod {
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
+
+
     private void commonSetup(final FMLCommonSetupEvent event) {
         LOGGER.info("OrbitalRadish: common setup");
 
         // run as queued work so it executes safely after registries are ready
         event.enqueueWork(() -> {
             // add fresh radishes to the composter at a modest chance
-            ComposterBlock.COMPOSTABLES.put(RADISH.get(), 0.3F);
+            ComposterBlock.COMPOSTABLES.put(ModItems.RADISH.get(), 0.3F);
 
             // cooked radish should compost more reliably (optional)
             ComposterBlock.COMPOSTABLES.put(COOKED_RADISH.get(), 0.65F);
@@ -112,6 +123,7 @@ public class OrbitalRadishMod {
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
             event.accept(RADISH_BLOCK_ITEM.get());
+            event.accept(DOUBLE_COMPRESSED_RADISH_BLOCK_ITEM.get());
 
         }
         if (event.getTabKey() == CreativeModeTabs.COMBAT) {
@@ -119,7 +131,7 @@ public class OrbitalRadishMod {
 
         }
         if (event.getTabKey() == CreativeModeTabs.FOOD_AND_DRINKS) {
-            event.accept(RADISH.get());
+            event.accept(ModItems.RADISH.get());
             event.accept(COOKED_RADISH.get());
             event.accept(RADISH_LEAF.get());
         }
