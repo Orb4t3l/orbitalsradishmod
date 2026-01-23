@@ -3,9 +3,11 @@
   "item.orbitalradish.cooked_radish": "Cooked Radish",
   "block.orbitalradish.radish_block": "Radish Block",
   "block.orbitalradish.double_compressed_radish_block": "Double Compressed Radish Block",
+  "block.orbitalradish.triple_compressed_radish_block": "Triple Compressed Radish Block",
   "item.orbitalradish.radish_arrow": "Radish Arrow",
   "item.orbitalradish.radish_stick": "Radish Stick",
-  "item.orbitalradish.radish_leaf": "Radish Leaf"
+  "item.orbitalradish.radish_leaf": "Radish Leaf",
+  "block.orbitalradish.radish_bricks": "Radish Bricks"
 
 
 }

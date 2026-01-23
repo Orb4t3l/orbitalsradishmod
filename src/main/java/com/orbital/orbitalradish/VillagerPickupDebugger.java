@@ -22,6 +22,18 @@ public class VillagerPickupDebugger {
     private static final TagKey<Item> VILLAGER_FOOD =
             TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("minecraft", "villager_food"));
 
+    // prints villager contents for debugging — call this when you observe a villager nearby
+    private static void dumpVillagerInventory(Villager v) {
+        System.out.println("Villager inventory for " + v + " at " + v.blockPosition());
+        for (int i = 0; i < v.getInventory().getContainerSize(); i++) {
+            ItemStack s = v.getInventory().getItem(i);
+            if (!s.isEmpty()) {
+                System.out.println(" slot " + i + ": " + s.getCount() + "x " + s.getItem().toString());
+            }
+        }
+    }
+
+
     @SubscribeEvent
     public static void onItemSpawn(EntityJoinLevelEvent event) {
         if (!(event.getEntity() instanceof ItemEntity itemEntity)) return;
@@ -55,3 +67,4 @@ public class VillagerPickupDebugger {
         System.out.println("==========================");
     }
 }
+

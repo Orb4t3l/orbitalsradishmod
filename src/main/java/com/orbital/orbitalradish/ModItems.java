@@ -1,5 +1,6 @@
 package com.orbital.orbitalradish;
 
+import com.orbital.orbitalradish.block.RadishCrop;
 import com.orbital.orbitalradish.item.RadishArrowItem;
 import com.orbital.orbitalradish.item.RadishStickItem;
 import net.minecraft.world.food.FoodProperties;
@@ -17,13 +18,13 @@ public final class ModItems {
     public static final RegistryObject<Item> RADISH = ITEMS.register("radish",
             () -> new ItemNameBlockItem(
                     OrbitalRadishMod.RADISH_CROP.get(),
-                    new Item.Properties()
-                            .food(new FoodProperties.Builder()
-                                    .nutrition(2)
-                                    .saturationMod(0.3f)
-                                    .build()
-                            )
+                    new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).build())
             ));
+
+
+
+
+
 
 
     public static final RegistryObject<Item> RADISH_ARROW =
@@ -46,6 +47,14 @@ public final class ModItems {
 
     public static final RegistryObject<Item> DOUBLE_COMPRESSED_RADISH_BLOCK_ITEM =
             ITEMS.register("double_compressed_radish_block", () -> new BlockItem(OrbitalRadishMod.DOUBLE_COMPRESSED_RADISH_BLOCK.get(), new Item.Properties()));
+
+    public static final RegistryObject<Item> TRIPLE_COMPRESSED_RADISH_BLOCK_ITEM =
+            ITEMS.register("triple_compressed_radish_block", () -> new BlockItem(OrbitalRadishMod.TRIPLE_COMPRESSED_RADISH_BLOCK.get(), new Item.Properties()));
+
+
+
+    public static final RegistryObject<Item> RADISH_BRICKS_ITEM =
+            ITEMS.register("radish_bricks", () -> new BlockItem(OrbitalRadishMod.RADISH_BRICKS.get(), new Item.Properties()));
 
 
     private ModItems() {}

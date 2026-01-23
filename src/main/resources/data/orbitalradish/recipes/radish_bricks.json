@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XX",
+    "XX"
+  ],
+  "key": {
+    "X": { "item": "orbitalradish:radish_block" }
+  },
+  "result": {
+    "item": "orbitalradish:radish_bricks",
+    "count": 4
+  }
+}

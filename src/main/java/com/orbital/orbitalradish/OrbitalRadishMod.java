@@ -35,6 +35,7 @@ import net.minecraft.world.level.block.ComposterBlock;
 
 @Mod(OrbitalRadishMod.MODID)
 public class OrbitalRadishMod {
+
     public static final String MODID = "orbitalradish";
 
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -60,7 +61,6 @@ public class OrbitalRadishMod {
             () -> new Item(new Item.Properties()));
 
 
-
     public static final RegistryObject<Block> RADISH_BLOCK = BLOCKS.register("radish_block",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.DIRT).mapColor(MapColor.PLANT)));
 
@@ -74,6 +74,18 @@ public class OrbitalRadishMod {
     public static final RegistryObject<Item> DOUBLE_COMPRESSED_RADISH_BLOCK_ITEM = ITEMS.register("double_compressed_radish_block",
             () -> new BlockItem(DOUBLE_COMPRESSED_RADISH_BLOCK.get(), new Item.Properties()));
 
+    public static final RegistryObject<Block> TRIPLE_COMPRESSED_RADISH_BLOCK = BLOCKS.register("triple_compressed_radish_block",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.DIRT).mapColor(MapColor.PLANT)));
+
+    public static final RegistryObject<Item> TRIPLE_COMPRESSED_RADISH_BLOCK_ITEM = ITEMS.register("triple_compressed_radish_block",
+            () -> new BlockItem(TRIPLE_COMPRESSED_RADISH_BLOCK.get(), new Item.Properties()));
+
+    public static final RegistryObject<Block> RADISH_BRICKS = BLOCKS.register("radish_bricks",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE).mapColor(MapColor.STONE)));
+
+    public static final RegistryObject<Item> RADISH_BRICKS_ITEM = ITEMS.register("radish_bricks",
+            () -> new BlockItem(RADISH_BRICKS.get(), new Item.Properties()));
+
     public static final RegistryObject<Item> RADISH_STICK = ITEMS.register("radish_stick",
             () -> new RadishStickItem(new Item.Properties().durability(99999999)));
 
@@ -81,7 +93,12 @@ public class OrbitalRadishMod {
     public OrbitalRadishMod(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
 
+// register network channel early (once)
+//        NetworkHandler.register();
+
         modEventBus.addListener(this::commonSetup);
+
+
 
         // register blocks first
         BLOCKS.register(modEventBus);
@@ -100,7 +117,6 @@ public class OrbitalRadishMod {
 
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
-
 
 
     private void commonSetup(final FMLCommonSetupEvent event) {
@@ -124,6 +140,8 @@ public class OrbitalRadishMod {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
             event.accept(RADISH_BLOCK_ITEM.get());
             event.accept(DOUBLE_COMPRESSED_RADISH_BLOCK_ITEM.get());
+            event.accept(TRIPLE_COMPRESSED_RADISH_BLOCK_ITEM.get());
+            event.accept(RADISH_BRICKS_ITEM.get());
 
         }
         if (event.getTabKey() == CreativeModeTabs.COMBAT) {
