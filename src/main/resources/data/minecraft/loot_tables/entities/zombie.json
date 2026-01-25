@@ -34,40 +34,55 @@
       "bonus_rolls": 0.0,
       "conditions": [
         { "condition": "minecraft:killed_by_player" },
-        { "chance": 0.025, "condition": "minecraft:random_chance_with_looting", "looting_multiplier": 0.01 }
+        {
+          "condition": "minecraft:random_chance_with_looting",
+          "chance": 0.025,
+          "looting_multiplier": 0.01
+        }
       ],
       "entries": [
         { "type": "minecraft:item", "name": "minecraft:iron_ingot" },
         { "type": "minecraft:item", "name": "minecraft:carrot" },
         {
           "type": "minecraft:item",
+          "name": "minecraft:potato",
           "functions": [
             {
+              "function": "minecraft:furnace_smelt",
               "conditions": [
-                { "condition": "minecraft:entity_properties", "entity": "this", "predicate": { "flags": { "is_on_fire": true } } }
-              ],
-              "function": "minecraft:furnace_smelt"
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "flags": { "is_on_fire": true }
+                  }
+                }
+              ]
             }
-          ],
-          "name": "minecraft:potato"
+          ]
         },
         {
           "type": "minecraft:item",
           "name": "orbitalradish:radish",
           "functions": [
             {
-              "condition": {
-                "condition": "minecraft:entity_properties",
-                "entity": "this",
-                "predicate": { "flags": { "is_on_fire": true } }
-              },
-              "function": "minecraft:furnace_smelt"
+              "function": "minecraft:furnace_smelt",
+              "conditions": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "flags": { "is_on_fire": true }
+                  }
+                }
+              ]
             }
           ]
         }
       ],
       "rolls": 1.0
     }
+
 
 
   ],

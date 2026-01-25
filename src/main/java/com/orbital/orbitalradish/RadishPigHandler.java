@@ -1,5 +1,7 @@
 package com.orbital.orbitalradish;
 
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -64,47 +66,59 @@ public final class RadishPigHandler {
 
     // Player right-click feed handler
     @SubscribeEvent
-    public static void onEntityInteract(PlayerInteractEvent.EntityInteractSpecific event) {
-        // server only
-        Level lvl = event.getLevel();
-        if (lvl.isClientSide()) return;
+    public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
+        if (!(event.getTarget() instanceof Pig pig)) return;
 
-        // target must be a pig
-        if (!(event.getTarget() instanceof Pig)) return;
-        Pig pig = (Pig) event.getTarget();
+        Player player = event.getEntity();
+        ItemStack stack = event.getItemStack();
 
-        // actor must be a player
-        if (!(event.getEntity() instanceof Player)) return;
-        Player player = (Player) event.getEntity();
+        if (!stack.is(ModItems.RADISH.get())) return;
 
-        // check held item in the hand used
-        InteractionHand hand = event.getHand();
-        ItemStack stack = player.getItemInHand(hand);
-        if (stack.isEmpty() || !stack.is(ModItems.RADISH.get())) return;
+        Level level = player.level();
+        if (level.isClientSide) return;
 
-        // ignore babies
-        if (pig.isBaby()) return;
+        // 🐖 BABY PIG: grow it
+        if (pig.isBaby()) {
+            if (!player.getAbilities().instabuild) {
+                stack.shrink(1);
+            }
 
-        // set pig in love mode (vanilla API)
-        try {
+
+
+            pig.ageUp((int)((-pig.getAge()) * 0.01F), true);
+            if (!pig.level().isClientSide() && pig.level() instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(
+                        ParticleTypes.HAPPY_VILLAGER,
+                        pig.getX(),
+                        pig.getY() + 0.5,
+                        pig.getZ(),
+                        5,        // count
+                        0.3, 0.3, 0.3, // spread
+                        0.0       // speed
+                );
+            }
+            event.setCanceled(true);
+            return;
+        }
+
+
+
+        if (pig.isInLove()) {
+            event.setCanceled(true);
+            return;
+        }
+        // 🐖 ADULT PIG: breeding
+        if (pig.canFallInLove()) {
+            if (!player.getAbilities().instabuild) {
+                stack.shrink(1);
+            }
+
             pig.setInLove(player);
-        } catch (Throwable t) {
-            // best-effort fallback — if mappings differ, swallow and continue
-            System.out.println("[RadishPigHandler] setInLove failed: " + t);
+            pig.level().broadcastEntityEvent(pig, (byte)18);
+            event.setCanceled(true);
         }
-
-        // consume one radish (respect creative)
-        if (!player.getAbilities().instabuild) {
-            stack.shrink(1);
-        }
-
-        // nudge a nearby pig that is already in love so they meet
-        nudgeNearbyLovedPig(pig);
-
-        // mark event handled
-        event.setCancellationResult(InteractionResult.sidedSuccess(lvl.isClientSide()));
-        event.setCanceled(true);
     }
+
 
     // Try to find a nearby pig that is already in love and nudge both to move to each other
     private static void nudgeNearbyLovedPig(Pig pig) {
