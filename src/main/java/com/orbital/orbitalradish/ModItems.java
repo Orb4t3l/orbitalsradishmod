@@ -56,6 +56,15 @@ public final class ModItems {
     public static final RegistryObject<Item> RADISH_BRICKS_ITEM =
             ITEMS.register("radish_bricks", () -> new BlockItem(OrbitalRadishMod.RADISH_BRICKS.get(), new Item.Properties()));
 
+    public static final RegistryObject<Item> RADISH_SLAB_ITEM =
+            ITEMS.register("radish_slab", () -> new BlockItem(OrbitalRadishMod.RADISH_SLAB.get(), new Item.Properties()));
+
+    public static final RegistryObject<Item> RADISH_WALLS_ITEM =
+            ITEMS.register("radish_walls", () -> new BlockItem(OrbitalRadishMod.RADISH_WALLS.get(), new Item.Properties()));
+
+
+    public static final RegistryObject<Item> RADISH_STAIRS_ITEM =
+            ITEMS.register("radish_stairs", () -> new BlockItem(OrbitalRadishMod.RADISH_STAIRS.get(), new Item.Properties()));
 
     public static final RegistryObject<Item> RADISH_STEW =
             ITEMS.register("radish_stew", () -> new Item(new Item.Properties().food(

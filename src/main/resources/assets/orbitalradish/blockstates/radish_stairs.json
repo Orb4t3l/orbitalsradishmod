@@ -1,0 +1,14 @@
+{
+  "variants": {
+    "facing=north,half=bottom,shape=straight": { "model": "orbitalradish:block/radish_bricks_stairs" },
+    "facing=north,half=bottom,shape=inner_left": { "model": "orbitalradish:block/radish_bricks_stairs_inner" },
+    "facing=north,half=bottom,shape=inner_right": { "model": "orbitalradish:block/radish_bricks_stairs_inner" },
+    "facing=north,half=bottom,shape=outer_left": { "model": "orbitalradish:block/radish_bricks_stairs_outer" },
+    "facing=north,half=bottom,shape=outer_right": { "model": "orbitalradish:block/radish_bricks_stairs_outer" },
+    "facing=north,half=top,shape=straight": { "model": "orbitalradish:block/radish_bricks_stairs_top" },
+    "facing=north,half=top,shape=inner_left": { "model": "orbitalradish:block/radish_bricks_stairs_inner_top" },
+    "facing=north,half=top,shape=inner_right": { "model": "orbitalradish:block/radish_bricks_stairs_inner_top" },
+    "facing=north,half=top,shape=outer_left": { "model": "orbitalradish:block/radish_bricks_stairs_outer_top" },
+    "facing=north,half=top,shape=outer_right": { "model": "orbitalradish:block/radish_bricks_stairs_outer_top" }
+  }
+}

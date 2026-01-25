@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "orbitalradish:block/radish_bricks",
+    "top": "orbitalradish:block/radish_bricks",
+    "side": "orbitalradish:block/radish_bricks"
+  },
+  "y": 180
+}

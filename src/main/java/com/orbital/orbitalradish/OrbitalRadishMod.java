@@ -3,6 +3,7 @@ package com.orbital.orbitalradish;
 import com.orbital.orbitalradish.block.RadishCrop;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
@@ -10,8 +11,7 @@ import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
@@ -30,7 +30,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 import com.orbital.orbitalradish.item.RadishStickItem;
-import net.minecraft.world.level.block.ComposterBlock;
+
 
 
 @Mod(OrbitalRadishMod.MODID)
@@ -86,6 +86,40 @@ public class OrbitalRadishMod {
 
     public static final RegistryObject<Item> RADISH_BRICKS_ITEM = ITEMS.register("radish_bricks",
             () -> new BlockItem(RADISH_BRICKS.get(), new Item.Properties()));
+
+    public static final RegistryObject<Block> RADISH_STAIRS = BLOCKS.register("radish_stairs",
+            () -> new StairBlock(() -> RADISH_BRICKS.get().defaultBlockState(),
+                    BlockBehaviour.Properties.of()
+                            .strength(2.0f, 6.0f)
+                            .sound(SoundType.STONE)
+            ));
+
+
+
+
+    public static final RegistryObject<Item> RADISH_STAIRS_ITEM = ITEMS.register("radish_stairs",
+            () -> new BlockItem(RADISH_STAIRS.get(), new Item.Properties()));
+
+    public static final RegistryObject<Block> RADISH_SLAB = BLOCKS.register("radish_slab",
+            () -> new SlabBlock(
+                    BlockBehaviour.Properties.of()
+                            .strength(2.0f, 6.0f)
+                            .sound(SoundType.STONE)
+            ));
+
+
+    public static final RegistryObject<Item> RADISH_SLAB_ITEM = ITEMS.register("radish_slab",
+            () -> new BlockItem(RADISH_SLAB.get(), new Item.Properties()));
+
+    public static final RegistryObject<Block> RADISH_WALLS = BLOCKS.register("radish_walls",
+            () -> new WallBlock(
+                    BlockBehaviour.Properties.of()
+                            .strength(2.0f, 6.0f)
+                            .sound(SoundType.STONE)
+            ));
+
+    public static final RegistryObject<Item> RADISH_WALLS_ITEM = ITEMS.register("radish_walls",
+            () -> new BlockItem(RADISH_WALLS.get(), new Item.Properties()));
 
     public static final RegistryObject<Item> RADISH_STICK = ITEMS.register("radish_stick",
             () -> new RadishStickItem(new Item.Properties().durability(99999999)));
@@ -143,6 +177,9 @@ public class OrbitalRadishMod {
             event.accept(DOUBLE_COMPRESSED_RADISH_BLOCK_ITEM.get());
             event.accept(TRIPLE_COMPRESSED_RADISH_BLOCK_ITEM.get());
             event.accept(RADISH_BRICKS_ITEM.get());
+            event.accept(RADISH_SLAB_ITEM.get());
+            event.accept(RADISH_STAIRS_ITEM.get());
+            event.accept(RADISH_WALLS_ITEM.get());
 
         }
         if (event.getTabKey() == CreativeModeTabs.COMBAT) {

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "up=true,north=low,east=none,south=low,west=low": { "model": "orbitalradish:block/radish_bricks_wall_post" },
+    "up=true,north=high,east=none,south=high,west=high": { "model": "orbitalradish:block/radish_bricks_wall_side" },
+    "up=false,north=none,east=none,south=none,west=none": { "model": "orbitalradish:block/radish_bricks_wall_inventory" }
+  }
+}
