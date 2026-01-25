@@ -77,46 +77,53 @@ public final class RadishPigHandler {
         Level level = player.level();
         if (level.isClientSide) return;
 
-        // 🐖 BABY PIG: grow it
+// 🐖 BABY PIG: grow it
         if (pig.isBaby()) {
             if (!player.getAbilities().instabuild) {
                 stack.shrink(1);
             }
 
-
-
+            // Grow the pig (vanilla age logic)
             pig.ageUp((int)((-pig.getAge()) * 0.01F), true);
+
+            // Spawn green happy particles for baby pigs
             if (!pig.level().isClientSide() && pig.level() instanceof ServerLevel serverLevel) {
                 serverLevel.sendParticles(
                         ParticleTypes.HAPPY_VILLAGER,
                         pig.getX(),
                         pig.getY() + 0.5,
                         pig.getZ(),
-                        5,        // count
+                        5,          // count
                         0.3, 0.3, 0.3, // spread
-                        0.0       // speed
+                        0.0         // speed
                 );
             }
+
             event.setCanceled(true);
             return;
         }
 
-
-
+// 🚫 Cancel interaction if the pig is already in love
         if (pig.isInLove()) {
             event.setCanceled(true);
             return;
         }
-        // 🐖 ADULT PIG: breeding
-        if (pig.canFallInLove()) {
+
+// 🐖 ADULT PIG: breeding (vanilla cooldown enforced)
+        if (!pig.isBaby() && pig.canFallInLove() && pig.getAge() == 0) {
             if (!player.getAbilities().instabuild) {
                 stack.shrink(1);
             }
 
+            // Set pig in love mode
             pig.setInLove(player);
+
+            // Spawn heart particles (vanilla)
             pig.level().broadcastEntityEvent(pig, (byte)18);
+
             event.setCanceled(true);
         }
+
     }
 
 
