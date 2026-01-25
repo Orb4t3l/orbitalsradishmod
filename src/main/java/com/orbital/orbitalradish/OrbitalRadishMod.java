@@ -49,7 +49,6 @@ public class OrbitalRadishMod {
     public static final RegistryObject<Block> RADISH_CROP = BLOCKS.register("radish_crop",
             () -> new RadishCrop(BlockBehaviour.Properties.copy(Blocks.WHEAT)));
 
-    // Radish item: edible AND placeable (ItemNameBlockItem ties the item to placing the crop block)
 
     public static final RegistryObject<Item> COOKED_RADISH = ITEMS.register("cooked_radish",
             () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationMod(0.4f).build())));
@@ -59,6 +58,8 @@ public class OrbitalRadishMod {
 
     public static final RegistryObject<Item> RADISH_LEAF = ITEMS.register("radish_leaf",
             () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> RADISH_STEW = ITEMS.register("radish_stew",
+            () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationMod(0.4f).build())));
 
 
     public static final RegistryObject<Block> RADISH_BLOCK = BLOCKS.register("radish_block",
@@ -152,6 +153,7 @@ public class OrbitalRadishMod {
             event.accept(ModItems.RADISH.get());
             event.accept(COOKED_RADISH.get());
             event.accept(RADISH_LEAF.get());
+            event.accept(RADISH_STEW.get());
         }
 
     }

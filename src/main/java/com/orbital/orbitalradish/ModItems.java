@@ -57,5 +57,10 @@ public final class ModItems {
             ITEMS.register("radish_bricks", () -> new BlockItem(OrbitalRadishMod.RADISH_BRICKS.get(), new Item.Properties()));
 
 
+    public static final RegistryObject<Item> RADISH_STEW =
+            ITEMS.register("radish_stew", () -> new Item(new Item.Properties().food(
+                    new FoodProperties.Builder().nutrition(6).saturationMod(0.4f).build()
+            )));
+
     private ModItems() {}
 }

@@ -137,6 +137,62 @@ public class VillagerPickUpHandler {
         }
     }
 
+    // After adding radishes to a villager's inventory, compact them so one slot can reach the 12-item threshold.
+// This avoids the "I see radishes but villager never becomes willing" problem.
+    private static void consolidateRadishStacks(Villager v) {
+        final int invSize = v.getInventory().getContainerSize();
+        int total = 0;
+
+        // Count and clear out all radish stacks
+        for (int i = 0; i < invSize; i++) {
+            ItemStack s = v.getInventory().getItem(i);
+            if (!s.isEmpty() && s.is(ModItems.RADISH.get())) {
+                total += s.getCount();
+                v.getInventory().setItem(i, ItemStack.EMPTY);
+            }
+        }
+
+        if (total <= 0) return;
+
+        // Put as many full stacks as needed, starting from first slot (or the first slot that accepts items)
+        int idx = 0;
+        while (total > 0 && idx < invSize) {
+            // find next available slot (empty or already radish in case of some weird ordering)
+            ItemStack cur = v.getInventory().getItem(idx);
+            if (cur.isEmpty()) {
+                int put = Math.min(total, ModItems.RADISH.get().getMaxStackSize()); // typically 64
+                v.getInventory().setItem(idx, new ItemStack(ModItems.RADISH.get(), put));
+                total -= put;
+            }
+            idx++;
+        }
+
+        // If there are still leftover items (shouldn't normally happen), stuff them into any remaining slots
+        idx = 0;
+        while (total > 0 && idx < invSize) {
+            ItemStack cur = v.getInventory().getItem(idx);
+            if (!cur.isEmpty() && cur.is(ModItems.RADISH.get())) {
+                int canAdd = ModItems.RADISH.get().getMaxStackSize() - cur.getCount();
+                if (canAdd > 0) {
+                    int add = Math.min(canAdd, total);
+                    cur.grow(add);
+                    v.getInventory().setItem(idx, cur);
+                    total -= add;
+                }
+            }
+            idx++;
+        }
+
+        // Debug: log the first few stacks so you can verify a slot reached >=12
+        for (int i = 0; i < Math.min(8, invSize); i++) {
+            ItemStack s = v.getInventory().getItem(i);
+            if (!s.isEmpty() && s.is(ModItems.RADISH.get())) {
+                System.out.println("[Radish] Villager " + v.getUUID() + " slot " + i + " = " + s.getCount());
+            }
+        }
+    }
+
+
     /**
      * Try to transfer the entire ItemEntity stack into a nearby farmer's inventory.
      * If the farmer accepts the full stack (remainder empty), the ItemEntity is removed
@@ -159,7 +215,7 @@ public class VillagerPickUpHandler {
             if (v.getVillagerData().getProfession() != VillagerProfession.FARMER) continue;
 
             ItemStack remainder = v.getInventory().addItem(stack.copy());
-
+            consolidateRadishStacks(v);
             if (remainder.isEmpty()) {
                 itemEntity.setItem(ItemStack.EMPTY);
                 itemEntity.discard();
