@@ -160,10 +160,12 @@ public class OrbitalRadishMod {
         // run as queued work so it executes safely after registries are ready
         event.enqueueWork(() -> {
             // add fresh radishes to the composter at a modest chance
-            ComposterBlock.COMPOSTABLES.put(ModItems.RADISH.get(), 0.3F);
+            ComposterBlock.COMPOSTABLES.put(ModItems.RADISH.get(), 0.4F);
+
+            ComposterBlock.COMPOSTABLES.put(ModItems.RADISH_LEAF.get(), 0.25F);
 
             // cooked radish should compost more reliably (optional)
-            ComposterBlock.COMPOSTABLES.put(COOKED_RADISH.get(), 0.65F);
+            ComposterBlock.COMPOSTABLES.put(COOKED_RADISH.get(), 0.7F);
 
             // if you also want the radish item used as arrow visual to be compostable:
             // ComposterBlock.COMPOSTABLES.put(RADISH_ARROW.get(), 0.3F);
