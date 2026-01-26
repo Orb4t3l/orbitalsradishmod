@@ -26,6 +26,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 import com.orbital.orbitalradish.item.RadishStickItem;
+import net.minecraftforge.fml.ModLoadingContext;
+
 
 
 
@@ -133,31 +135,25 @@ public class OrbitalRadishMod {
     public static final RegistryObject<Item> RADISH_STICK = ITEMS.register("radish_stick",
             () -> new RadishStickItem(new Item.Properties().durability(99999999)));
 
+    @SuppressWarnings("deprecation")
+    public OrbitalRadishMod() {
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-    public OrbitalRadishMod(FMLJavaModLoadingContext context) {
-        IEventBus modEventBus = context.getModEventBus();
-
-
+        // register listeners
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::addCreative);
 
-
-
-        // register blocks first
+        // register registries on the mod event bus
         BLOCKS.register(modEventBus);
-
-        // register the centralized items register
         ModItems.ITEMS.register(modEventBus);
-
-        // other registries
         ModEntities.ENTITIES.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
 
+        // register for general Forge events
         MinecraftForge.EVENT_BUS.register(this);
 
-        // use creativetabconents to place items into tabs
-        modEventBus.addListener(this::addCreative);
-
-        context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        // register config via ModLoadingContext (works across the modern mappings)
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
 
