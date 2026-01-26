@@ -1,2 +1,2 @@
 # orbitalsradishmod
-a mod that adds radishs and radish sticks to minecraft
+A mod that adds radishes, radish blocks, radish weapons, and more!
