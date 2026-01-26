@@ -1,7 +1,90 @@
 {
-  "variants": {
-    "up=true,north=low,east=none,south=low,west=low": { "model": "orbitalradish:block/radish_bricks_wall_post" },
-    "up=true,north=high,east=none,south=high,west=high": { "model": "orbitalradish:block/radish_bricks_wall_side" },
-    "up=false,north=none,east=none,south=none,west=none": { "model": "orbitalradish:block/radish_bricks_wall_inventory" }
-  }
+  "multipart": [
+    {
+      "apply": {
+        "model": "orbitalradish:block/radish_wall_post"
+      },
+      "when": {
+        "up": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "orbitalradish:block/radish_wall_side",
+        "uvlock": true
+      },
+      "when": {
+        "north": "low"
+      }
+    },
+    {
+      "apply": {
+        "model": "orbitalradish:block/radish_wall_side",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "east": "low"
+      }
+    },
+    {
+      "apply": {
+        "model": "orbitalradish:block/radish_wall_side",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south": "low"
+      }
+    },
+    {
+      "apply": {
+        "model": "orbitalradish:block/radish_wall_side",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "west": "low"
+      }
+    },
+    {
+      "apply": {
+        "model": "orbitalradish:block/radish_wall_side_tall",
+        "uvlock": true
+      },
+      "when": {
+        "north": "tall"
+      }
+    },
+    {
+      "apply": {
+        "model": "orbitalradish:block/radish_wall_side_tall",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "east": "tall"
+      }
+    },
+    {
+      "apply": {
+        "model": "orbitalradish:block/radish_wall_side_tall",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south": "tall"
+      }
+    },
+    {
+      "apply": {
+        "model": "orbitalradish:block/radish_wall_side_tall",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "west": "tall"
+      }
+    }
+  ]
 }

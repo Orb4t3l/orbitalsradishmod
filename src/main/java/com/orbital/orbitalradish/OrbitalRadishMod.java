@@ -6,11 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.BowItem;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemNameBlockItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -58,8 +54,20 @@ public class OrbitalRadishMod {
 
     public static final RegistryObject<Item> RADISH_LEAF = ITEMS.register("radish_leaf",
             () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> RADISH_STEW = ITEMS.register("radish_stew",
-            () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationMod(0.4f).build())));
+    public static final RegistryObject<Item> RADISH_STEW = ITEMS.register(
+            "radish_stew",
+            () -> new BowlFoodItem(
+                    new Item.Properties()
+                            .stacksTo(1)
+                            .craftRemainder(Items.BOWL)
+                            .food(new FoodProperties.Builder()
+                                    .nutrition(6)
+                                    .saturationMod(0.4f)
+                                    .build()
+                            )
+            )
+    );
+
 
 
     public static final RegistryObject<Block> RADISH_BLOCK = BLOCKS.register("radish_block",
@@ -111,12 +119,13 @@ public class OrbitalRadishMod {
     public static final RegistryObject<Item> RADISH_SLAB_ITEM = ITEMS.register("radish_slab",
             () -> new BlockItem(RADISH_SLAB.get(), new Item.Properties()));
 
-    public static final RegistryObject<Block> RADISH_WALLS = BLOCKS.register("radish_walls",
+    public static final RegistryObject<Block> RADISH_WALLS = BLOCKS.register(
+            "radish_walls",
             () -> new WallBlock(
-                    BlockBehaviour.Properties.of()
-                            .strength(2.0f, 6.0f)
-                            .sound(SoundType.STONE)
-            ));
+                    BlockBehaviour.Properties.copy(Blocks.BRICK_WALL)
+            )
+    );
+
 
     public static final RegistryObject<Item> RADISH_WALLS_ITEM = ITEMS.register("radish_walls",
             () -> new BlockItem(RADISH_WALLS.get(), new Item.Properties()));

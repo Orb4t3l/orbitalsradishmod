@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/stairs",
+  "parent": "minecraft:block/outer_stairs",
   "textures": {
     "bottom": "orbitalradish:block/radish_bricks",
     "side": "orbitalradish:block/radish_bricks",

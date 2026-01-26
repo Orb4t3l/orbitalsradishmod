@@ -4,9 +4,7 @@ import com.orbital.orbitalradish.block.RadishCrop;
 import com.orbital.orbitalradish.item.RadishArrowItem;
 import com.orbital.orbitalradish.item.RadishStickItem;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemNameBlockItem;
+import net.minecraft.world.item.*;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -66,10 +64,20 @@ public final class ModItems {
     public static final RegistryObject<Item> RADISH_STAIRS_ITEM =
             ITEMS.register("radish_stairs", () -> new BlockItem(OrbitalRadishMod.RADISH_STAIRS.get(), new Item.Properties()));
 
-    public static final RegistryObject<Item> RADISH_STEW =
-            ITEMS.register("radish_stew", () -> new Item(new Item.Properties().food(
-                    new FoodProperties.Builder().nutrition(6).saturationMod(0.4f).build()
-            )));
+    public static final RegistryObject<Item> RADISH_STEW = ITEMS.register(
+            "radish_stew",
+            () -> new BowlFoodItem(
+                    new Item.Properties()
+                            .stacksTo(1)
+                            .craftRemainder(Items.BOWL)
+                            .food(new FoodProperties.Builder()
+                                    .nutrition(6)
+                                    .saturationMod(0.4f)
+                                    .build()
+                            )
+            )
+    );
+
 
     private ModItems() {}
 }

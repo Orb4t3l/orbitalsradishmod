@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "orbitalradish:radish_bricks"
+  },
+  "result": "orbitalradish:radish_slab",
+  "count": 1
+}
