@@ -18,10 +18,10 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.*;
 
 /**
- * Robust pickup handler for Forge 1.20.1.
- * - Attempts immediate transfer when an ItemEntity spawns.
- * - Retries periodically for leftover radish ItemEntities on the same ServerLevel.
- * - Explicitly removes item entities and notifies nearby players to avoid client ghosting.
+  Robust pickup handler
+ - Attempts immediate transfer when an ItemEntity spawns.
+ - Retries periodically for leftover radish ItemEntities on the same ServerLevel.
+ - Explicitly removes item entities and notifies nearby players to avoid client ghosting.
  */
 @Mod.EventBusSubscriber(modid = OrbitalRadishMod.MODID)
 public class VillagerPickUpHandler {

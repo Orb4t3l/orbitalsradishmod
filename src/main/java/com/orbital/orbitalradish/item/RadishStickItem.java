@@ -20,9 +20,9 @@ public class RadishStickItem extends BowItem {
         super(props);
     }
 
-    /**
-     * We still advertise supported projectiles as sticks so the vanilla UI treats it like a bow.
-     */
+
+    /**We still advertise supported projectiles as sticks so the vanilla UI treats it like a bow. */
+
     @Override
     public java.util.function.Predicate<ItemStack> getAllSupportedProjectiles() {
         return stack -> stack.getItem() == Items.STICK;

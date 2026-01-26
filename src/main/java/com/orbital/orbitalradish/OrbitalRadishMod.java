@@ -61,8 +61,8 @@ public class OrbitalRadishMod {
                             .stacksTo(1)
                             .craftRemainder(Items.BOWL)
                             .food(new FoodProperties.Builder()
-                                    .nutrition(6)
-                                    .saturationMod(0.4f)
+                                    .nutrition(8)
+                                    .saturationMod(0.8f)
                                     .build()
                             )
             )
@@ -137,8 +137,6 @@ public class OrbitalRadishMod {
     public OrbitalRadishMod(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
 
-// register network channel early (once)
-//        NetworkHandler.register();
 
         modEventBus.addListener(this::commonSetup);
 
@@ -147,7 +145,7 @@ public class OrbitalRadishMod {
         // register blocks first
         BLOCKS.register(modEventBus);
 
-        // register the centralized items register (only one)
+        // register the centralized items register
         ModItems.ITEMS.register(modEventBus);
 
         // other registries
@@ -156,7 +154,7 @@ public class OrbitalRadishMod {
 
         MinecraftForge.EVENT_BUS.register(this);
 
-        // use BuildCreativeModeTabContentsEvent to place items into tabs
+        // use creativetabconents to place items into tabs
         modEventBus.addListener(this::addCreative);
 
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
@@ -168,7 +166,7 @@ public class OrbitalRadishMod {
 
         // run as queued work so it executes safely after registries are ready
         event.enqueueWork(() -> {
-            // add fresh radishes to the composter at a modest chance
+            // add fresh radishes to the composter at a chance
             ComposterBlock.COMPOSTABLES.put(ModItems.RADISH.get(), 0.4F);
 
             ComposterBlock.COMPOSTABLES.put(ModItems.RADISH_LEAF.get(), 0.25F);
@@ -177,11 +175,10 @@ public class OrbitalRadishMod {
             ComposterBlock.COMPOSTABLES.put(COOKED_RADISH.get(), 0.7F);
 
             // if you also want the radish item used as arrow visual to be compostable:
-            // ComposterBlock.COMPOSTABLES.put(RADISH_ARROW.get(), 0.3F);
         });
     }
 
-    // This is how you add items to vanilla tabs in 1.20.x (no .tab on Item.Properties)
+
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
             event.accept(RADISH_BLOCK_ITEM.get());
