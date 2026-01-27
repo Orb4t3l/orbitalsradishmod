@@ -1,0 +1,20 @@
+{
+  "criteria": {
+    "use_radish_on_farmland": {
+      "trigger": "minecraft:item_used_on_block",
+      "conditions": {
+        "item": {
+          "items": ["orbitalradish:radish"]
+        },
+        "location": {
+          "block": {
+            "blocks": ["minecraft:farmland"]
+          }
+        }
+      }
+    }
+  },
+  "rewards": {
+    "function": "orbitalradish:grant_seedy"
+  }
+}
