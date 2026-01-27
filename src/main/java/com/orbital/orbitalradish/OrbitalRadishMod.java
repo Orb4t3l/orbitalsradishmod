@@ -134,30 +134,17 @@ public class OrbitalRadishMod {
             () -> new RadishStickItem(new Item.Properties().durability(99999999)));
 
 
-    public OrbitalRadishMod(FMLJavaModLoadingContext context) {
-        IEventBus modEventBus = context.getModEventBus();
-
+    public OrbitalRadishMod() {  // <-- NO PARAMETERS HERE!
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         modEventBus.addListener(this::commonSetup);
-
-
-
-        // register blocks first
         BLOCKS.register(modEventBus);
-
-        // register the centralized items register
         ModItems.ITEMS.register(modEventBus);
-
-        // other registries
         ModEntities.ENTITIES.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
-
         MinecraftForge.EVENT_BUS.register(this);
-
-        // use creativetabconents to place items into tabs
         modEventBus.addListener(this::addCreative);
-
-        context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        net.minecraftforge.fml.ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
 

@@ -20,8 +20,7 @@ public class VillagerPickupDebugger {
 
     // Correct way to reference minecraft:villager_food in 1.20.1
     private static final TagKey<Item> VILLAGER_FOOD =
-            TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("minecraft", "villager_food"));
-
+            TagKey.create(Registries.ITEM, new ResourceLocation("minecraft", "villager_food"));
     // prints villager contents for debugging — call this when you observe a villager nearby
     private static void dumpVillagerInventory(Villager v) {
         System.out.println("Villager inventory for " + v + " at " + v.blockPosition());
