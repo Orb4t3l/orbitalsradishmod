@@ -32,7 +32,7 @@ public class Config
 
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> ITEM_STRINGS = BUILDER
             .comment("A list of items to log on common setup.")
-            .defineListAllowEmpty("items", List.of("minecraft:iron_ingot"), Config::validateItemName);
+            .defineList("items", List.of("minecraft:iron_ingot"), Config::validateItemName);
 
     static final ForgeConfigSpec SPEC = BUILDER.build();
 
@@ -41,12 +41,11 @@ public class Config
     public static String magicNumberIntroduction;
     public static Set<Item> items;
 
-    private static boolean validateItemName(final Object obj)
-    {
-        if (!(obj instanceof final String itemName)) return false;
-        ResourceLocation rl = ResourceLocation.tryParse(itemName);
-        return rl != null && ForgeRegistries.ITEMS.containsKey(rl);
+    private static boolean validateItemName(final Object obj) {
+        if (!(obj instanceof String s)) return false;
+        return s.contains(":"); // optional sanity check
     }
+
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event)
