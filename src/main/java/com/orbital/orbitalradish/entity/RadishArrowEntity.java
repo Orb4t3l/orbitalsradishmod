@@ -11,49 +11,44 @@ import net.minecraft.world.level.Level;
 
 public class RadishArrowEntity extends AbstractArrow implements ItemSupplier {
 
-    private final ItemStack itemStack;
+    private ItemStack itemStack = ItemStack.EMPTY;
 
     /**
-     * Constructor used by the entity factory / deserialization.
+     * Entity factory / deserialization constructor.
+     * Many builds require a (EntityType, Level) ctor for the entity factory — delegate to the main ctor.
      */
-    public RadishArrowEntity(EntityType<? extends AbstractArrow> type, Level level) {
-        super(type, level);
-        this.itemStack = ItemStack.EMPTY;
+    public RadishArrowEntity(EntityType<? extends RadishArrowEntity> type, Level level) {
+        // This delegates to the constructor below which calls super(type, level, ItemStack)
+        this(type, level, ItemStack.EMPTY);
     }
 
     /**
-     * Convenience constructor used when spawning from code/items (no custom stack).
-     * Delegates to the full constructor with an empty ItemStack.
+     * Primary constructor used when the vanilla/forge constructor signature requires an ItemStack.
+     * Matches AbstractArrow(EntityType, Level, ItemStack).
+     */
+    public RadishArrowEntity(EntityType<? extends RadishArrowEntity> type, Level level, ItemStack stack) {
+        // Pass the ItemStack you want the arrow to carry/use to the super constructor.
+        super(type, level, stack == null ? ItemStack.EMPTY : stack.copy());
+        this.itemStack = (stack == null || stack.isEmpty()) ? ItemStack.EMPTY : stack.copy();
+    }
+
+    /**
+     * Convenience constructor: spawn from code with a shooter and optional itemstack.
+     * Note: we call the (EntityType, Level, ItemStack) ctor and then set the owner.
+     */
+    public RadishArrowEntity(Level level, LivingEntity shooter, ItemStack stack) {
+        this(ModEntities.RADISH_ARROW.get(), level, stack);
+        if (shooter != null) {
+            // set the shooter/owner on the arrow after construction
+            this.setOwner(shooter);
+        }
+    }
+
+    /**
+     * Convenience ctor: spawn with shooter and no custom stack.
      */
     public RadishArrowEntity(Level level, LivingEntity shooter) {
         this(level, shooter, ItemStack.EMPTY);
-    }
-
-    /**
-     * Convenience constructor used when spawning from code/items with an ItemStack to render.
-     * Example usage: new RadishArrowEntity(level, shooter, stack);
-     */
-    public RadishArrowEntity(Level level, LivingEntity shooter, ItemStack stack) {
-        // Use the registered entity type and the shooter-aware constructor so ownership/damage attribution works.
-        super(ModEntities.RADISH_ARROW.get(), shooter, level);
-
-        this.itemStack = (stack == null) ? ItemStack.EMPTY : stack.copy();
-
-        // setOwner is redundant when using the shooter-aware super constructor, but harmless to keep.
-        this.setOwner(shooter);
-
-        // Optional: tiny cooldown on the shooter's main hand item (defensive, and only if shooter is a player)
-        if (shooter instanceof Player player) {
-            try {
-                ItemStack main = player.getMainHandItem();
-                if (!main.isEmpty()) {
-                    // 5 ticks ~= 0.25s; adjust as desired (you previously used 5)
-                    player.getCooldowns().addCooldown(main.getItem(), 5);
-                }
-            } catch (Throwable ignored) {
-                // defensive: ignore if mappings or method signatures differ across versions
-            }
-        }
     }
 
     @Override
@@ -61,12 +56,12 @@ public class RadishArrowEntity extends AbstractArrow implements ItemSupplier {
         return this.itemStack;
     }
 
-    /**
-     * Make the arrow non-pickupable (returns nothing when picked up).
-     * If you want players to be able to pick it up, return the appropriate ItemStack here.
-     */
     @Override
     protected ItemStack getPickupItem() {
+        // return the stack given to players when picking the arrow up; change if you want a radish item
         return ItemStack.EMPTY;
     }
+
+    // Optional: if you want the arrow to carry custom NBT/item data for rendering or behavior,
+    // ensure you copy the stack and handle serialization (saveAdditional/load) as needed.
 }

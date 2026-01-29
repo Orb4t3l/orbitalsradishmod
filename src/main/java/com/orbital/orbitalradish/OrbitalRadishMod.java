@@ -42,8 +42,13 @@ public class OrbitalRadishMod {
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
 
+    // FIXED: Create properties from scratch using of() for Forge 1.20.4
     public static final RegistryObject<Block> RADISH_CROP = BLOCKS.register("radish_crop",
-            () -> new RadishCrop(BlockBehaviour.Properties.copy(Blocks.WHEAT)));
+            () -> new RadishCrop(BlockBehaviour.Properties.of()
+                    .noCollission()
+                    .randomTicks()
+                    .instabreak()
+                    .sound(SoundType.CROP)));
 
 
     public static final RegistryObject<Item> COOKED_RADISH = ITEMS.register("cooked_radish",
@@ -69,38 +74,60 @@ public class OrbitalRadishMod {
     );
 
 
-
+    // FIXED: Create properties from scratch for Forge 1.20.4
     public static final RegistryObject<Block> RADISH_BLOCK = BLOCKS.register("radish_block",
-            () -> new Block(BlockBehaviour.Properties.copy(Blocks.DIRT).mapColor(MapColor.PLANT)));
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .strength(0.5f)
+                    .sound(SoundType.GRASS)
+                    .mapColor(MapColor.PLANT)));
 
     public static final RegistryObject<Item> RADISH_BLOCK_ITEM = ITEMS.register("radish_block",
             () -> new BlockItem(RADISH_BLOCK.get(), new Item.Properties()));
 
 
+    // FIXED: Create properties from scratch for Forge 1.20.4
     public static final RegistryObject<Block> DOUBLE_COMPRESSED_RADISH_BLOCK = BLOCKS.register("double_compressed_radish_block",
-            () -> new Block(BlockBehaviour.Properties.copy(Blocks.DIRT).mapColor(MapColor.PLANT)));
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .strength(1.0f)
+                    .sound(SoundType.GRASS)
+                    .mapColor(MapColor.PLANT)));
 
     public static final RegistryObject<Item> DOUBLE_COMPRESSED_RADISH_BLOCK_ITEM = ITEMS.register("double_compressed_radish_block",
             () -> new BlockItem(DOUBLE_COMPRESSED_RADISH_BLOCK.get(), new Item.Properties()));
 
+    // FIXED: Create properties from scratch for Forge 1.20.4
     public static final RegistryObject<Block> TRIPLE_COMPRESSED_RADISH_BLOCK = BLOCKS.register("triple_compressed_radish_block",
-            () -> new Block(BlockBehaviour.Properties.copy(Blocks.DIRT).mapColor(MapColor.PLANT)));
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .strength(1.5f)
+                    .sound(SoundType.GRASS)
+                    .mapColor(MapColor.PLANT)));
 
     public static final RegistryObject<Item> TRIPLE_COMPRESSED_RADISH_BLOCK_ITEM = ITEMS.register("triple_compressed_radish_block",
             () -> new BlockItem(TRIPLE_COMPRESSED_RADISH_BLOCK.get(), new Item.Properties()));
 
+    // FIXED: Create properties from scratch for Forge 1.20.4
     public static final RegistryObject<Block> RADISH_BRICKS = BLOCKS.register("radish_bricks",
-            () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE).mapColor(MapColor.STONE)));
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .strength(2.0f, 6.0f)
+                    .sound(SoundType.STONE)
+                    .requiresCorrectToolForDrops()
+                    .mapColor(MapColor.STONE)));
 
     public static final RegistryObject<Item> RADISH_BRICKS_ITEM = ITEMS.register("radish_bricks",
             () -> new BlockItem(RADISH_BRICKS.get(), new Item.Properties()));
 
-    public static final RegistryObject<Block> RADISH_STAIRS = BLOCKS.register("radish_stairs",
-            () -> new StairBlock(() -> RADISH_BRICKS.get().defaultBlockState(),
+    // FIXED: StairBlock takes BlockState directly in 1.20.4, not Supplier
+    public static final RegistryObject<Block> RADISH_STAIRS = BLOCKS.register(
+            "radish_stairs",
+            () -> new StairBlock(
+                    RADISH_BRICKS.get().defaultBlockState(),
                     BlockBehaviour.Properties.of()
                             .strength(2.0f, 6.0f)
                             .sound(SoundType.STONE)
-            ));
+                            .requiresCorrectToolForDrops()
+            )
+    );
+
 
 
 
@@ -119,10 +146,14 @@ public class OrbitalRadishMod {
     public static final RegistryObject<Item> RADISH_SLAB_ITEM = ITEMS.register("radish_slab",
             () -> new BlockItem(RADISH_SLAB.get(), new Item.Properties()));
 
+    // FIXED: Create properties from scratch for Forge 1.20.4
     public static final RegistryObject<Block> RADISH_WALLS = BLOCKS.register(
             "radish_walls",
             () -> new WallBlock(
-                    BlockBehaviour.Properties.copy(Blocks.BRICK_WALL)
+                    BlockBehaviour.Properties.of()
+                            .strength(2.0f, 6.0f)
+                            .sound(SoundType.STONE)
+                            .requiresCorrectToolForDrops()
             )
     );
 
