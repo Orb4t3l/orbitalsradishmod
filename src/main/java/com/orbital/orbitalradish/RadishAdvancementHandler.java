@@ -18,15 +18,15 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@SuppressWarnings("deprecation")
 @Mod.EventBusSubscriber(modid = OrbitalRadishMod.MODID)
 public class RadishAdvancementHandler {
 
+    // FIXED: Use fromNamespaceAndPath instead of deprecated constructor
     private static final ResourceLocation SEEDY =
-            new ResourceLocation("minecraft", "husbandry/plant_seed");
+            ResourceLocation.fromNamespaceAndPath("minecraft", "husbandry/plant_seed");
 
     private static final ResourceLocation TAKE_AIM =
-            new ResourceLocation("minecraft", "adventure/shoot_arrow");
+            ResourceLocation.fromNamespaceAndPath("minecraft", "adventure/shoot_arrow");
 
     @SubscribeEvent
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {

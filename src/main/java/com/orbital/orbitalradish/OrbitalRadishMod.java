@@ -51,14 +51,17 @@ public class OrbitalRadishMod {
                     .sound(SoundType.CROP)));
 
 
+    // FIXED: saturationMod -> saturationModifier in 1.20.6
     public static final RegistryObject<Item> COOKED_RADISH = ITEMS.register("cooked_radish",
-            () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationMod(0.4f).build())));
+            () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.4f).build())));
 
     public static final RegistryObject<Item> RADISH_ARROW = ITEMS.register("radish_arrow",
             () -> new com.orbital.orbitalradish.item.RadishArrowItem(new Item.Properties()));
 
     public static final RegistryObject<Item> RADISH_LEAF = ITEMS.register("radish_leaf",
             () -> new Item(new Item.Properties()));
+
+    // FIXED: saturationMod -> saturationModifier in 1.20.6
     public static final RegistryObject<Item> RADISH_STEW = ITEMS.register(
             "radish_stew",
             () -> new BowlFoodItem(
@@ -67,7 +70,7 @@ public class OrbitalRadishMod {
                             .craftRemainder(Items.BOWL)
                             .food(new FoodProperties.Builder()
                                     .nutrition(8)
-                                    .saturationMod(0.8f)
+                                    .saturationModifier(0.8f)
                                     .build()
                             )
             )

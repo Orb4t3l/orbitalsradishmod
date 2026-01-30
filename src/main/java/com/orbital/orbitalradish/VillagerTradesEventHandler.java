@@ -4,6 +4,7 @@ import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.ItemCost;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -22,10 +23,11 @@ public class VillagerTradesEventHandler {
             List<VillagerTrades.ItemListing> level1Trades =
                     event.getTrades().get(1);
 
+            // FIXED: In 1.20.6, MerchantOffer uses ItemCost instead of ItemStack for inputs
             level1Trades.add((trader, random) ->
                     new net.minecraft.world.item.trading.MerchantOffer(
-                            new ItemStack(ModItems.RADISH.get(), 19),
-                            new ItemStack(Items.EMERALD, 1),
+                            new ItemCost(ModItems.RADISH.get(), 19),  // Input cost
+                            new ItemStack(Items.EMERALD, 1),          // Output
                             12,    // max uses
                             2,     // villager XP
                             0.05F  // price multiplier

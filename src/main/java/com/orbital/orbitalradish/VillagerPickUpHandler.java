@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.*;
 
 /**
-  Robust pickup handler
+ Robust pickup handler
  - Attempts immediate transfer when an ItemEntity spawns.
  - Retries periodically for leftover radish ItemEntities on the same ServerLevel.
  - Explicitly removes item entities and notifies nearby players to avoid client ghosting.
@@ -154,13 +154,17 @@ public class VillagerPickUpHandler {
 
         if (total <= 0) return;
 
+        // FIXED: In 1.20.6, getMaxStackSize() is no longer a method on Item
+        // Use the default max stack size of 64, or get it from an ItemStack
+        final int maxStackSize = new ItemStack(ModItems.RADISH.get()).getMaxStackSize();
+
         // Put as many full stacks as needed, starting from first slot (or the first slot that accepts items)
         int idx = 0;
         while (total > 0 && idx < invSize) {
             // find next available slot (empty or already radish in case of some weird ordering)
             ItemStack cur = v.getInventory().getItem(idx);
             if (cur.isEmpty()) {
-                int put = Math.min(total, ModItems.RADISH.get().getMaxStackSize()); // typically 64
+                int put = Math.min(total, maxStackSize);
                 v.getInventory().setItem(idx, new ItemStack(ModItems.RADISH.get(), put));
                 total -= put;
             }
@@ -172,7 +176,7 @@ public class VillagerPickUpHandler {
         while (total > 0 && idx < invSize) {
             ItemStack cur = v.getInventory().getItem(idx);
             if (!cur.isEmpty() && cur.is(ModItems.RADISH.get())) {
-                int canAdd = ModItems.RADISH.get().getMaxStackSize() - cur.getCount();
+                int canAdd = maxStackSize - cur.getCount();
                 if (canAdd > 0) {
                     int add = Math.min(canAdd, total);
                     cur.grow(add);

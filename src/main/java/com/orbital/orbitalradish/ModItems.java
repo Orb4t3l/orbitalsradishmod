@@ -14,10 +14,14 @@ public final class ModItems {
             DeferredRegister.create(ForgeRegistries.ITEMS, OrbitalRadishMod.MODID);
 
     public static final RegistryObject<Item> RADISH = ITEMS.register("radish",
-            () -> new ItemNameBlockItem(
-                    OrbitalRadishMod.RADISH_CROP.get(),
-                    new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.3f).build())
-            ));
+            () -> new Item(new Item.Properties()
+                    .food(new FoodProperties.Builder()
+                            .nutrition(2)
+                            .saturationModifier(0.3f)  // NEW
+                            .build()
+                    )
+            )
+    );
 
 
 
@@ -33,7 +37,7 @@ public final class ModItems {
 
     public static final RegistryObject<Item> COOKED_RADISH =
             ITEMS.register("cooked_radish", () -> new Item(new Item.Properties().food(
-                    new FoodProperties.Builder().nutrition(6).saturationMod(0.4f).build()
+                    new FoodProperties.Builder().nutrition(6).saturationModifier(0.4f).build()
             )));
 
     public static final RegistryObject<Item> RADISH_LEAF =
@@ -72,7 +76,7 @@ public final class ModItems {
                             .craftRemainder(Items.BOWL)
                             .food(new FoodProperties.Builder()
                                     .nutrition(6)
-                                    .saturationMod(0.4f)
+                                    .saturationModifier(0.4f)
                                     .build()
                             )
             )

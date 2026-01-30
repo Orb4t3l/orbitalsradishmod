@@ -2,25 +2,24 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '6.0.47' // stable FG version for MC 1.20.4
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
 }
 
 group = 'com.orbital'
-version = '1.0.0' // Your mod version
+version = '1.0.0'
 def mod_id = 'orbitalradish'
 def mod_name = "Orbital's Radish Mod"
-def mod_description = 'A mod I made for my best friend RadishStick'
+def mod_description = 'A basic food mod that adds radishes, radish blocks, a radish weapon, and more!'
 def mod_authors = 'orbital'
 def mod_license = 'MIT'
-def minecraft_version = '1.20.4'
-def forge_version = '49.0.3'
+def minecraft_version = '1.20.6'
+def forge_version = '50.2.4'
 
 base {
     archivesName = mod_id
 }
 
-// Target Java 17 for MC 1.18+
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 
@@ -59,7 +58,7 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-    // ForgeGradle automatically adds Forge maven and Maven Central
+    mavenCentral()
 }
 
 dependencies {
@@ -98,7 +97,6 @@ tasks.named('jar', Jar).configure {
     finalizedBy 'reobfJar'
 }
 
-// Maven publishing
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -110,9 +108,10 @@ publishing {
     }
     repositories {
         maven {
-            name = 'localModRepo'
-            url = uri("${project.projectDir}/mcmodsrepo") // Your local Maven repo folder
+            name = "Forge"
+            url = "https://maven.minecraftforge.net"
         }
+        mavenCentral()
     }
 }
 
@@ -120,13 +119,12 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
-// IntelliJ / Eclipse setup
 idea.module { downloadJavadoc = downloadSources = true }
+
 eclipse {
     synchronizationTasks 'genEclipseRuns'
 }
 
-// Merge sourceSets to a single directory
 sourceSets.each {
     def dir = layout.buildDirectory.dir("sourceSets/$it.name")
     it.output.resourcesDir = dir

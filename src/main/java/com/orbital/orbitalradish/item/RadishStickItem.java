@@ -5,6 +5,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -12,7 +13,6 @@ import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 
 /**
@@ -34,6 +34,58 @@ public class RadishStickItem extends BowItem {
     }
 
     /**
+     * Override use to enable the bow drawing/charging mechanic.
+     * This allows the player to hold right-click to charge the bow.
+     */
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
+        boolean hasAmmo = !this.getAmmo(player).isEmpty() || player.getAbilities().instabuild;
+
+        if (!hasAmmo) {
+            return InteractionResultHolder.fail(itemstack);
+        } else {
+            player.startUsingItem(hand);
+            return InteractionResultHolder.consume(itemstack);
+        }
+    }
+
+    /**
+     * Helper method to find sticks in player inventory.
+     */
+    private ItemStack getAmmo(Player player) {
+        // Check main hand
+        ItemStack main = player.getMainHandItem();
+        if (main.getItem() == Items.STICK) {
+            return main;
+        }
+
+        // Check offhand
+        ItemStack off = player.getOffhandItem();
+        if (off.getItem() == Items.STICK) {
+            return off;
+        }
+
+        // Check inventory
+        NonNullList<ItemStack> items = player.getInventory().items;
+        for (ItemStack s : items) {
+            if (s.getItem() == Items.STICK) {
+                return s;
+            }
+        }
+
+        return ItemStack.EMPTY;
+    }
+
+    /**
+     * Set the use duration (how long you can hold to charge)
+     */
+    @Override
+    public int getUseDuration(ItemStack stack) {
+        return 72000; // Same as vanilla bow
+    }
+
+    /**
      * Called when the player releases the bow charge.
      * This implementation:
      * - finds/consumes a stick (unless Infinity is present),
@@ -47,10 +99,19 @@ public class RadishStickItem extends BowItem {
         if (!(entity instanceof Player player)) return;
 
         // Read enchantments from the bow item (the 'stack' parameter)
-        int powerLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, stack);
-        int punchLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, stack);
-        int flameLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, stack);
-        int infinityLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, stack);
+        int powerLevel = stack.getEnchantmentLevel(Enchantments.POWER);
+        int punchLevel = stack.getEnchantmentLevel(Enchantments.PUNCH);
+        int flameLevel = stack.getEnchantmentLevel(Enchantments.FLAME);
+        int infinityLevel = stack.getEnchantmentLevel(Enchantments.INFINITY);
+
+        // Calculate how long the bow was drawn
+        int drawTime = this.getUseDuration(stack) - timeLeft;
+        float charge = getPowerForTime(drawTime);
+
+        // If not charged enough, don't fire
+        if (charge < 0.1F) {
+            return;
+        }
 
         // Find a stick in main hand, offhand, or inventory
         ItemStack found = ItemStack.EMPTY;
@@ -103,15 +164,15 @@ public class RadishStickItem extends BowItem {
         RadishArrowEntity arrow = new RadishArrowEntity(level, player, renderStack);
 
         // Base damage: start with a small default and apply Power enchantment bonus
-        // We'll keep the default base as 1.0 (half-heart) like your original.
-        double baseDamage = 1.0D;
+        // Scale with charge amount (fully charged = 3.0x base damage)
+        double baseDamage = 2.0D;
         if (powerLevel > 0) {
             // Vanilla extra damage formula ~ 0.5 * power + 0.5
             baseDamage += 0.5D * powerLevel + 0.5D;
         }
 
         try {
-            arrow.setBaseDamage(baseDamage);
+            arrow.setBaseDamage(baseDamage * charge);
         } catch (Throwable ignored) {
             // fallback: ignore if mappings differ
         }
@@ -127,7 +188,7 @@ public class RadishStickItem extends BowItem {
         // Apply Flame
         if (flameLevel > 0) {
             try {
-                arrow.setSecondsOnFire(100); // 5 seconds (100 ticks)
+                arrow.setRemainingFireTicks(100); // 100 ticks
             } catch (Throwable ignored) {
             }
         }
@@ -135,8 +196,17 @@ public class RadishStickItem extends BowItem {
         // Position, shoot and add to world
         arrow.setPos(player.getX(), player.getEyeY() - 0.10000000149011612D, player.getZ());
 
-        // Fixed velocity & inaccuracy; you can compute charge-based velocity if you want
-        arrow.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 2.0F, 1.0F);
+        // Velocity scales with charge (fully charged = 3.0 velocity)
+        float velocity = charge * 3.0F;
+        arrow.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, velocity, 1.0F);
+
+        // Critical hit if fully charged
+        if (charge >= 1.0F) {
+            try {
+                arrow.setCritArrow(true);
+            } catch (Throwable ignored) {
+            }
+        }
 
         // If the bow has Infinity, set the pickup behavior to CREATIVE_ONLY (so arrows don't drop for pickup)
         // This mirrors vanilla's behavior but is optional; if the method doesn't exist on your mappings we ignore it.
@@ -149,18 +219,25 @@ public class RadishStickItem extends BowItem {
 
         level.addFreshEntity(arrow);
 
-        // Small sound feedback
-        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F);
+        // Sound feedback - pitch varies with charge
+        level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + charge * 0.5F);
 
-        // Small cooldown on the shooter's main-hand item (defensive; only if shooter is a player)
-        if (!player.getAbilities().instabuild) {
-            try {
-                ItemStack mainNow = player.getMainHandItem();
-                if (!mainNow.isEmpty()) {
-                    player.getCooldowns().addCooldown(mainNow.getItem(), 5);
-                }
-            } catch (Throwable ignored) {
-            }
+        // Damage the bow item (unless in creative or infinity)
+        if (!player.getAbilities().instabuild && infinityLevel == 0) {
+            stack.hurtAndBreak(1, player, (p) -> p.broadcastBreakEvent(player.getUsedItemHand()));
         }
+    }
+
+    /**
+     * Calculate power/charge based on draw time (same as vanilla bow)
+     */
+    public static float getPowerForTime(int drawTime) {
+        float f = (float)drawTime / 20.0F;
+        f = (f * f + f * 2.0F) / 3.0F;
+        if (f > 1.0F) {
+            f = 1.0F;
+        }
+        return f;
     }
 }

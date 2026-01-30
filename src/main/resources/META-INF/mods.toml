@@ -1,7 +1,7 @@
 # This is the mods.toml file for OrbitalRadishMod
 
 modLoader="javafml" #mandatory
-loaderVersion="[49.0.3,)" #mandatory - Forge 49.0.3 corresponds to Minecraft 1.20.4
+loaderVersion="[50.2.0,)" #mandatory - Forge 49.0.3 corresponds to Minecraft 1.20.4
 license="MIT" #mandatory
 
 [[mods]]
@@ -15,13 +15,13 @@ displayTest="MATCH_VERSION" #default - warns if client/server versions differ
 [[dependencies.orbitalradish]]
 modId="forge" #mandatory
 mandatory=true
-versionRange="[49.0.3,)" #matches loaderVersion above
+versionRange="[50.2.0,)" #matches loaderVersion above
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.orbitalradish]]
 modId="minecraft" #mandatory
 mandatory=true
-versionRange="[1.20.4,2.0)" #minimum 1.20.4, less than 2.0
+versionRange="[1.20.6,)" #minimum 1.20.4, less than 2.0
 ordering="NONE"
 side="BOTH"
