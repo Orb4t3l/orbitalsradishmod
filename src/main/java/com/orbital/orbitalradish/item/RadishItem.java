@@ -25,26 +25,33 @@ public class RadishItem extends Item {
         Player player = context.getPlayer();
         ItemStack stack = context.getItemInHand();
 
-        // Only plant when clicking the top face of farmland
-        if (face != Direction.UP) return InteractionResult.PASS;
-
-        // clicking block must be farmland
+        // Check if clicking block is farmland
         BlockState clickedState = level.getBlockState(clickedPos);
-        if (!clickedState.is(Blocks.FARMLAND)) return InteractionResult.PASS;
+        boolean isFarmland = clickedState.is(Blocks.FARMLAND);
 
-        BlockPos targetPos = clickedPos.above(); // place crop on top of farmland
+        // FIXED: If targeting farmland, handle it completely (don't PASS to eating)
+        if (isFarmland && face == Direction.UP) {
+            BlockPos targetPos = clickedPos.above(); // place crop on top of farmland
 
-        if (!level.getBlockState(targetPos).isAir()) return InteractionResult.PASS;
-
-        if (!level.isClientSide()) {
-            // place radish crop block using the registry object you already have
-            level.setBlock(targetPos, OrbitalRadishMod.RADISH_CROP.get().defaultBlockState(), 3);
-
-            if (player != null && !player.getAbilities().instabuild) {
-                stack.shrink(1);
+            // If target position is not air, can't plant but still consume the interaction
+            // This prevents eating when clicking farmland
+            if (!level.getBlockState(targetPos).isAir()) {
+                return InteractionResult.FAIL;
             }
+
+            // Plant the radish crop
+            if (!level.isClientSide()) {
+                level.setBlock(targetPos, OrbitalRadishMod.RADISH_CROP.get().defaultBlockState(), 3);
+
+                if (player != null && !player.getAbilities().instabuild) {
+                    stack.shrink(1);
+                }
+            }
+
+            return InteractionResult.sidedSuccess(level.isClientSide());
         }
 
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        // Only PASS if NOT targeting farmland (allows eating in other situations)
+        return InteractionResult.PASS;
     }
 }

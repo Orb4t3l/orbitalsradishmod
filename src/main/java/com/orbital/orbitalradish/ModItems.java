@@ -2,6 +2,7 @@ package com.orbital.orbitalradish;
 
 import com.orbital.orbitalradish.block.RadishCrop;
 import com.orbital.orbitalradish.item.RadishArrowItem;
+import com.orbital.orbitalradish.item.RadishItem;
 import com.orbital.orbitalradish.item.RadishStickItem;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
@@ -14,10 +15,10 @@ public final class ModItems {
             DeferredRegister.create(ForgeRegistries.ITEMS, OrbitalRadishMod.MODID);
 
     public static final RegistryObject<Item> RADISH = ITEMS.register("radish",
-            () -> new Item(new Item.Properties()
+            () -> new RadishItem(new Item.Properties()
                     .food(new FoodProperties.Builder()
                             .nutrition(2)
-                            .saturationModifier(0.3f)  // NEW
+                            .saturationModifier(0.3f)  // FIXED: saturationMod -> saturationModifier for 1.20.6
                             .build()
                     )
             )
