@@ -129,9 +129,6 @@ public class OrbitalRadishMod {
     );
 
 
-
-
-
     public static final RegistryObject<Item> RADISH_STAIRS_ITEM = ITEMS.register("radish_stairs",
             () -> new BlockItem(RADISH_STAIRS.get(), new Item.Properties()));
 
@@ -166,39 +163,52 @@ public class OrbitalRadishMod {
 
 
     public OrbitalRadishMod() {  // <-- NO PARAMETERS HERE!
+        LOGGER.info("[DEBUG] Mod constructor started");
+
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        LOGGER.info("[DEBUG] Retrieved mod event bus");
 
         modEventBus.addListener(this::commonSetup);
+        LOGGER.info("[DEBUG] Added commonSetup listener");
+
         BLOCKS.register(modEventBus);
+        LOGGER.info("[DEBUG] Registered BLOCKS");
+
         ModItems.ITEMS.register(modEventBus);
+        LOGGER.info("[DEBUG] Registered ITEMS");
+
         ModEntities.ENTITIES.register(modEventBus);
+        LOGGER.info("[DEBUG] Registered ENTITIES");
+
         CREATIVE_MODE_TABS.register(modEventBus);
+        LOGGER.info("[DEBUG] Registered CREATIVE_MODE_TABS");
+
         MinecraftForge.EVENT_BUS.register(this);
+        LOGGER.info("[DEBUG] Registered mod to Forge event bus");
+
         modEventBus.addListener(this::addCreative);
+        LOGGER.info("[DEBUG] Added addCreative listener");
+
         net.minecraftforge.fml.ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        LOGGER.info("[DEBUG] Registered config");
+
+        LOGGER.info("[DEBUG] Mod constructor finished");
     }
 
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        LOGGER.info("OrbitalRadish: common setup");
+        LOGGER.info("[DEBUG] commonSetup started");
 
-        // run as queued work so it executes safely after registries are ready
-//        event.enqueueWork(() -> {
-//            // add fresh radishes to the composter at a chance
-//            ComposterBlock.COMPOSTABLES.put(ModItems.RADISH.get(), 0.4F);
-//
-//            ComposterBlock.COMPOSTABLES.put(ModItems.RADISH_LEAF.get(), 0.25F);
-//
-//            // cooked radish should compost more reliably (optional)
-//            ComposterBlock.COMPOSTABLES.put(COOKED_RADISH.get(), 0.7F);
-//
-//            // if you also want the radish item used as arrow visual to be compostable:
-//        });
+        // event.enqueueWork(() -> { ... }); <-- uncomment when needed
+        LOGGER.info("[DEBUG] commonSetup finished");
     }
 
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
+        LOGGER.info("[DEBUG] addCreative called for tab: {}", event.getTabKey().location());
+
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
+            LOGGER.info("[DEBUG] Adding building blocks");
             event.accept(RADISH_BLOCK_ITEM.get());
             event.accept(DOUBLE_COMPRESSED_RADISH_BLOCK_ITEM.get());
             event.accept(TRIPLE_COMPRESSED_RADISH_BLOCK_ITEM.get());
@@ -206,32 +216,33 @@ public class OrbitalRadishMod {
             event.accept(RADISH_SLAB_ITEM.get());
             event.accept(RADISH_STAIRS_ITEM.get());
             event.accept(RADISH_WALLS_ITEM.get());
-
         }
         if (event.getTabKey() == CreativeModeTabs.COMBAT) {
+            LOGGER.info("[DEBUG] Adding combat items");
             event.accept(RADISH_STICK.get());
-
         }
         if (event.getTabKey() == CreativeModeTabs.FOOD_AND_DRINKS) {
+            LOGGER.info("[DEBUG] Adding food items");
             event.accept(ModItems.RADISH.get());
             event.accept(COOKED_RADISH.get());
             event.accept(RADISH_LEAF.get());
             event.accept(RADISH_STEW.get());
         }
 
+        LOGGER.info("[DEBUG] addCreative finished for tab: {}", event.getTabKey().location());
     }
 
 
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-        LOGGER.info("OrbitalRadish: server starting");
+        LOGGER.info("[DEBUG] onServerStarting called");
     }
 
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            LOGGER.info("OrbitalRadish: client setup, player name >> {}", Minecraft.getInstance().getUser().getName());
+            LOGGER.info("[DEBUG] onClientSetup called, player name >> {}", Minecraft.getInstance().getUser().getName());
         }
     }
 }
