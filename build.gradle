@@ -12,8 +12,8 @@ def mod_name = "Orbital's Radish Mod"
 def mod_description = 'A basic food mod that adds radishes, radish blocks, a radish weapon, and more!'
 def mod_authors = 'orbital'
 def mod_license = 'MIT'
-def minecraft_version = '1.20.6'
-def forge_version = '50.2.4'
+def minecraft_version = '1.21'
+def forge_version = '51.0.33'
 
 base {
     archivesName = mod_id
@@ -63,6 +63,14 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    // CRITICAL FIX: Force jopt-simple to be exactly 5.0.4 to fix module loading error
+    // Mojang ships 5.0.4, but some transitive dependencies request 6.0+
+    implementation('net.sf.jopt-simple:jopt-simple:5.0.4') {
+        version {
+            strictly '5.0.4'
+        }
+    }
 }
 
 tasks.named('processResources', ProcessResources).configure {

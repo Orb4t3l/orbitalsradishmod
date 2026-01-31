@@ -3,7 +3,6 @@ package com.orbital.orbitalradish;
 import com.orbital.orbitalradish.block.RadishCrop;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
@@ -27,8 +26,6 @@ import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 import com.orbital.orbitalradish.item.RadishStickItem;
 
-
-
 @Mod(OrbitalRadishMod.MODID)
 public class OrbitalRadishMod {
 
@@ -41,8 +38,6 @@ public class OrbitalRadishMod {
     public static final DeferredRegister<net.minecraft.world.item.CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
-
-    // FIXED: Create properties from scratch using of() for Forge 1.20.4
     public static final RegistryObject<Block> RADISH_CROP = BLOCKS.register("radish_crop",
             () -> new RadishCrop(BlockBehaviour.Properties.of()
                     .noCollission()
@@ -50,8 +45,6 @@ public class OrbitalRadishMod {
                     .instabreak()
                     .sound(SoundType.CROP)));
 
-
-    // FIXED: saturationMod -> saturationModifier in 1.20.6
     public static final RegistryObject<Item> COOKED_RADISH = ITEMS.register("cooked_radish",
             () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.4f).build())));
 
@@ -61,10 +54,10 @@ public class OrbitalRadishMod {
     public static final RegistryObject<Item> RADISH_LEAF = ITEMS.register("radish_leaf",
             () -> new Item(new Item.Properties()));
 
-    // FIXED: saturationMod -> saturationModifier in 1.20.6
+    // FIXED: BowlFoodItem doesn't exist in 1.21 - use regular Item instead
     public static final RegistryObject<Item> RADISH_STEW = ITEMS.register(
             "radish_stew",
-            () -> new BowlFoodItem(
+            () -> new Item(
                     new Item.Properties()
                             .stacksTo(1)
                             .craftRemainder(Items.BOWL)
@@ -76,8 +69,6 @@ public class OrbitalRadishMod {
             )
     );
 
-
-    // FIXED: Create properties from scratch for Forge 1.20.4
     public static final RegistryObject<Block> RADISH_BLOCK = BLOCKS.register("radish_block",
             () -> new Block(BlockBehaviour.Properties.of()
                     .strength(0.5f)
@@ -87,8 +78,6 @@ public class OrbitalRadishMod {
     public static final RegistryObject<Item> RADISH_BLOCK_ITEM = ITEMS.register("radish_block",
             () -> new BlockItem(RADISH_BLOCK.get(), new Item.Properties()));
 
-
-    // FIXED: Create properties from scratch for Forge 1.20.4
     public static final RegistryObject<Block> DOUBLE_COMPRESSED_RADISH_BLOCK = BLOCKS.register("double_compressed_radish_block",
             () -> new Block(BlockBehaviour.Properties.of()
                     .strength(1.0f)
@@ -98,7 +87,6 @@ public class OrbitalRadishMod {
     public static final RegistryObject<Item> DOUBLE_COMPRESSED_RADISH_BLOCK_ITEM = ITEMS.register("double_compressed_radish_block",
             () -> new BlockItem(DOUBLE_COMPRESSED_RADISH_BLOCK.get(), new Item.Properties()));
 
-    // FIXED: Create properties from scratch for Forge 1.20.4
     public static final RegistryObject<Block> TRIPLE_COMPRESSED_RADISH_BLOCK = BLOCKS.register("triple_compressed_radish_block",
             () -> new Block(BlockBehaviour.Properties.of()
                     .strength(1.5f)
@@ -108,7 +96,6 @@ public class OrbitalRadishMod {
     public static final RegistryObject<Item> TRIPLE_COMPRESSED_RADISH_BLOCK_ITEM = ITEMS.register("triple_compressed_radish_block",
             () -> new BlockItem(TRIPLE_COMPRESSED_RADISH_BLOCK.get(), new Item.Properties()));
 
-    // FIXED: Create properties from scratch for Forge 1.20.4
     public static final RegistryObject<Block> RADISH_BRICKS = BLOCKS.register("radish_bricks",
             () -> new Block(BlockBehaviour.Properties.of()
                     .strength(2.0f, 6.0f)
@@ -119,7 +106,6 @@ public class OrbitalRadishMod {
     public static final RegistryObject<Item> RADISH_BRICKS_ITEM = ITEMS.register("radish_bricks",
             () -> new BlockItem(RADISH_BRICKS.get(), new Item.Properties()));
 
-    // FIXED: StairBlock takes BlockState directly in 1.20.4, not Supplier
     public static final RegistryObject<Block> RADISH_STAIRS = BLOCKS.register(
             "radish_stairs",
             () -> new StairBlock(
@@ -131,7 +117,6 @@ public class OrbitalRadishMod {
             )
     );
 
-
     public static final RegistryObject<Item> RADISH_STAIRS_ITEM = ITEMS.register("radish_stairs",
             () -> new BlockItem(RADISH_STAIRS.get(), new Item.Properties()));
 
@@ -142,11 +127,9 @@ public class OrbitalRadishMod {
                             .sound(SoundType.STONE)
             ));
 
-
     public static final RegistryObject<Item> RADISH_SLAB_ITEM = ITEMS.register("radish_slab",
             () -> new BlockItem(RADISH_SLAB.get(), new Item.Properties()));
 
-    // FIXED: Create properties from scratch for Forge 1.20.4
     public static final RegistryObject<Block> RADISH_WALLS = BLOCKS.register(
             "radish_walls",
             () -> new WallBlock(
@@ -157,15 +140,13 @@ public class OrbitalRadishMod {
             )
     );
 
-
     public static final RegistryObject<Item> RADISH_WALLS_ITEM = ITEMS.register("radish_walls",
             () -> new BlockItem(RADISH_WALLS.get(), new Item.Properties()));
 
     public static final RegistryObject<Item> RADISH_STICK = ITEMS.register("radish_stick",
             () -> new RadishStickItem(new Item.Properties().durability(99999999)));
 
-
-    public OrbitalRadishMod() {  // <-- NO PARAMETERS HERE!
+    public OrbitalRadishMod() {
         LOGGER.info("[DEBUG] Mod constructor started");
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -198,14 +179,10 @@ public class OrbitalRadishMod {
         LOGGER.info("[DEBUG] Mod constructor finished");
     }
 
-
     private void commonSetup(final FMLCommonSetupEvent event) {
         LOGGER.info("[DEBUG] commonSetup started");
-
-        // event.enqueueWork(() -> { ... }); <-- uncomment when needed
         LOGGER.info("[DEBUG] commonSetup finished");
     }
-
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         LOGGER.info("[DEBUG] addCreative called for tab: {}", event.getTabKey().location());
@@ -234,7 +211,6 @@ public class OrbitalRadishMod {
 
         LOGGER.info("[DEBUG] addCreative finished for tab: {}", event.getTabKey().location());
     }
-
 
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {

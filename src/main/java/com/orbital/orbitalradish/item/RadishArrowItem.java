@@ -13,11 +13,8 @@ public class RadishArrowItem extends ArrowItem {
         super(properties);
     }
 
-    // FIXED: Pass the ItemStack to the RadishArrowEntity constructor
     @Override
-    public AbstractArrow createArrow(Level level, ItemStack stack, LivingEntity shooter) {
-        // Create RadishArrowEntity with level, shooter, AND the ItemStack (for rendering)
-        RadishArrowEntity arrow = new RadishArrowEntity(level, shooter, stack);
-        return arrow;
+    public AbstractArrow createArrow(Level level, ItemStack stack, LivingEntity shooter, ItemStack weapon) {
+        return new RadishArrowEntity(level, shooter, stack);
     }
 }
