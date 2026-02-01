@@ -90,10 +90,8 @@ public class RadishStickItem extends BowItem {
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
-        System.out.println("DEBUG: releaseUsing called!");
         if (level.isClientSide) return;
         if (!(entity instanceof Player player)) return;
-        System.out.println("DEBUG: Server side, is player");
 
         int power = getEnchantLevel(stack, level, Enchantments.POWER);
         int punch = getEnchantLevel(stack, level, Enchantments.PUNCH);
@@ -101,34 +99,52 @@ public class RadishStickItem extends BowItem {
         int infinity = getEnchantLevel(stack, level, Enchantments.INFINITY);
 
         float charge = getPowerForTime(getUseDuration(stack, player) - timeLeft);
-        System.out.println("DEBUG: Charge = " + charge);
         if (charge < 0.1F) return;
-        System.out.println("DEBUG: Charge check passed!");
 
         ItemStack ammo = findAmmo(player);
         boolean creative = player.getAbilities().instabuild;
-        System.out.println("DEBUG: Has ammo = " + !ammo.isEmpty() + ", creative = " + creative);
         if (ammo.isEmpty() && !creative) return;
 
         if (!creative && infinity == 0 && !ammo.isEmpty()) {
             ammo.shrink(1);
         }
 
-        System.out.println("DEBUG: Creating arrow entity...");
         RadishArrowEntity arrow = new RadishArrowEntity(
                 level,
                 player,
                 new ItemStack(Items.STICK)
         );
 
-        System.out.println("DEBUG: Arrow created, setting properties...");
-        // ... rest of code
+        double damage = 2.0D + (power > 0 ? power * 0.5D + 0.5D : 0.0D);
+        arrow.setBaseDamage(damage * charge);
 
-        System.out.println("DEBUG: Adding arrow to world...");
+        if (flame > 0) arrow.setRemainingFireTicks(100);
+        if (charge >= 1.0F) arrow.setCritArrow(true);
+        if (infinity > 0) arrow.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+
+        // Set velocity based on player's look direction
+        float xRot = player.getXRot();
+        float yRot = player.getYRot();
+        float velocity = charge * 3.0F;
+
+        double vx = -Math.sin(Math.toRadians(yRot)) * Math.cos(Math.toRadians(xRot)) * velocity;
+        double vy = -Math.sin(Math.toRadians(xRot)) * velocity;
+        double vz = Math.cos(Math.toRadians(yRot)) * Math.cos(Math.toRadians(xRot)) * velocity;
+
+        arrow.setDeltaMovement(vx, vy, vz);
+
         level.addFreshEntity(arrow);
-        System.out.println("DEBUG: Arrow added!");
 
-        // ... rest of code
+        level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS,
+                1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + charge * 0.5F);
+
+        if (!creative && infinity == 0) {
+            EquipmentSlot slot = player.getUsedItemHand() == InteractionHand.MAIN_HAND
+                    ? EquipmentSlot.MAINHAND
+                    : EquipmentSlot.OFFHAND;
+            stack.hurtAndBreak(1, player, slot);
+        }
     }
 
     public static float getPowerForTime(int drawTime) {
