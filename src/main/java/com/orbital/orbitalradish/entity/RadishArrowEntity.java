@@ -20,11 +20,20 @@ public class RadishArrowEntity extends AbstractArrow {
 
     // Constructor with shooter - used when spawning the arrow
     public RadishArrowEntity(Level level, LivingEntity shooter, ItemStack renderStack) {
-        // Call the other constructor with the registered entity type
-        this(ModEntities.RADISH_ARROW.get(), level);
-        // Set the owner/shooter
+        super(ModEntities.RADISH_ARROW.get(), level);
         this.setOwner(shooter);
-        // Store the render stack
+
+        // Spawn arrow in front of player based on their look direction
+        double offsetDistance = 2.0; // 1 block in front
+        double offsetX = -Math.sin(Math.toRadians(shooter.getYRot())) * offsetDistance;
+        double offsetZ = Math.cos(Math.toRadians(shooter.getYRot())) * offsetDistance;
+
+        this.setPos(
+                shooter.getX() + offsetX,
+                shooter.getEyeY() - 0.1,
+                shooter.getZ() + offsetZ
+        );
+
         this.renderStack = renderStack.copy();
     }
 

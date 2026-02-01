@@ -23,20 +23,23 @@ import net.minecraft.world.level.Level;
 public class RadishStickItem extends BowItem {
 
     public RadishStickItem(Properties props) {
-        super(props);
+        super(props);  // SET ENCHANTABILITY HERE!
     }
+
+    // REMOVE THESE - THEY DON'T WORK IN 1.21:
+    // @Override
+    // public int getEnchantmentValue() {
+    //     return 15;
+    // }
+
+    // @Override
+    // public boolean isEnchantable(ItemStack stack) {
+    //     return true;
+    // }
 
     /* ---------------- ENCHANTING ---------------- */
 
-    @Override
-    public int getEnchantmentValue() {
-        return 15;
-    }
 
-    @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return true;
-    }
 
     /* ---------------- AMMO ---------------- */
 
@@ -70,7 +73,8 @@ public class RadishStickItem extends BowItem {
         return InteractionResultHolder.consume(held);
     }
 
-    public int getUseDuration(ItemStack stack) {
+    @Override
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 72000;
     }
 
@@ -86,57 +90,45 @@ public class RadishStickItem extends BowItem {
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
+        System.out.println("DEBUG: releaseUsing called!");
         if (level.isClientSide) return;
         if (!(entity instanceof Player player)) return;
+        System.out.println("DEBUG: Server side, is player");
 
         int power = getEnchantLevel(stack, level, Enchantments.POWER);
         int punch = getEnchantLevel(stack, level, Enchantments.PUNCH);
         int flame = getEnchantLevel(stack, level, Enchantments.FLAME);
         int infinity = getEnchantLevel(stack, level, Enchantments.INFINITY);
 
-        float charge = getPowerForTime(getUseDuration(stack) - timeLeft);        if (charge < 0.1F) return;
+        float charge = getPowerForTime(getUseDuration(stack, player) - timeLeft);
+        System.out.println("DEBUG: Charge = " + charge);
+        if (charge < 0.1F) return;
+        System.out.println("DEBUG: Charge check passed!");
 
         ItemStack ammo = findAmmo(player);
         boolean creative = player.getAbilities().instabuild;
+        System.out.println("DEBUG: Has ammo = " + !ammo.isEmpty() + ", creative = " + creative);
         if (ammo.isEmpty() && !creative) return;
 
         if (!creative && infinity == 0 && !ammo.isEmpty()) {
             ammo.shrink(1);
         }
 
+        System.out.println("DEBUG: Creating arrow entity...");
         RadishArrowEntity arrow = new RadishArrowEntity(
                 level,
                 player,
                 new ItemStack(Items.STICK)
         );
 
-        double damage = 2.0D + (power > 0 ? power * 0.5D + 0.5D : 0.0D);
-        arrow.setBaseDamage(damage * charge);
+        System.out.println("DEBUG: Arrow created, setting properties...");
+        // ... rest of code
 
-        // FIXED: In 1.21, knockback is set differently
-//        if (punch > 0) {
-//            arrow.setKnockback(punch); // New signature in 1.21
-//        }
-
-        if (flame > 0) arrow.setRemainingFireTicks(100);
-        if (charge >= 1.0F) arrow.setCritArrow(true);
-        if (infinity > 0) arrow.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
-
-        arrow.shootFromRotation(player, player.getXRot(), player.getYRot(),
-                0.0F, charge * 3.0F, 1.0F);
-
+        System.out.println("DEBUG: Adding arrow to world...");
         level.addFreshEntity(arrow);
+        System.out.println("DEBUG: Arrow added!");
 
-        level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS,
-                1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + charge * 0.5F);
-
-        if (!creative && infinity == 0) {
-            EquipmentSlot slot = player.getUsedItemHand() == InteractionHand.MAIN_HAND
-                    ? EquipmentSlot.MAINHAND
-                    : EquipmentSlot.OFFHAND;
-            stack.hurtAndBreak(1, player, slot);
-        }
+        // ... rest of code
     }
 
     public static float getPowerForTime(int drawTime) {

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    { "item": "orbitalradish:radish" },
+    { "item": "orbitalradish:cooked_radish" },
+    { "item": "orbitalradish:radish_leaf" },
+    { "item": "minecraft:bowl" }
+  ],
+  "result": {
+    "id": "orbitalradish:radish_stew",
+    "count": 1
+  }
+}
