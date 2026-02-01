@@ -20,19 +20,30 @@ public class RadishArrowEntity extends AbstractArrow {
 
     // Constructor with shooter - used when spawning the arrow
     public RadishArrowEntity(Level level, LivingEntity shooter, ItemStack renderStack) {
-        // Call the other constructor with the registered entity type
-        this(ModEntities.RADISH_ARROW.get(), level);
+        // FIXED: Call super with EntityType and Level instead of this()
+        super(ModEntities.RADISH_ARROW.get(), level);
         // Set the owner/shooter
         this.setOwner(shooter);
+
+        // FIXED: Spawn arrow in front of player based on their look direction
+        double offsetDistance = 2.0; // 1 block in front
+        double offsetX = -Math.sin(Math.toRadians(shooter.getYRot())) * offsetDistance;
+        double offsetZ = Math.cos(Math.toRadians(shooter.getYRot())) * offsetDistance;
+
+        this.setPos(
+                shooter.getX() + offsetX,
+                shooter.getEyeY() - 0.1,
+                shooter.getZ() + offsetZ
+        );
+
         // Store the render stack
         this.renderStack = renderStack.copy();
     }
 
-    // FIXED: Return a vanilla STICK instead of radish_arrow when picked up
-    // This makes sense since the RadishStick uses sticks as ammo
+    // Return a vanilla STICK instead of radish_arrow when picked up
     @Override
     protected ItemStack getDefaultPickupItem() {
-        return new ItemStack(Items.STICK);  // Return vanilla stick, not radish arrow
+        return new ItemStack(Items.STICK);
     }
 
     // Optional: If you need the render stack elsewhere
