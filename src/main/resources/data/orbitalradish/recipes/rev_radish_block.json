@@ -4,7 +4,7 @@
     { "item": "orbitalradish:radish_block" }
   ],
   "result": {
-    "item": "orbitalradish:radish",
+    "id": "orbitalradish:radish",
     "count": 4
   }
 }

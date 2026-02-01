@@ -3,6 +3,8 @@
   "ingredient": {
     "item": "orbitalradish:radish_bricks"
   },
-  "result": "orbitalradish:radish_stairs",
-  "count": 1
+  "result": {
+    "id": "orbitalradish:radish_stairs",
+    "count": 1
+  }
 }

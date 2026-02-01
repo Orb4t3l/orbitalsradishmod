@@ -7,7 +7,7 @@
     { "item": "minecraft:bowl" }
   ],
   "result": {
-    "item": "orbitalradish:radish_stew",
+    "id": "orbitalradish:radish_stew",
     "count": 1
   }
 }

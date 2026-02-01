@@ -4,7 +4,7 @@
     { "item": "orbitalradish:double_compressed_radish_block" }
   ],
   "result": {
-    "item": "orbitalradish:radish_block",
+    "id": "orbitalradish:radish_block",
     "count": 9
   }
 }

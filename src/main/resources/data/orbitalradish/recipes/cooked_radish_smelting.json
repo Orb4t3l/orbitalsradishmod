@@ -1,7 +1,11 @@
 {
   "type": "minecraft:smelting",
-  "ingredient": { "item": "orbitalradish:radish" },
-  "result": "orbitalradish:cooked_radish",
-  "experience": 0.35,
-  "cookingtime": 200
+  "ingredient": {
+    "item": "orbitalradish:radish"
+  },
+  "result": {
+    "id": "orbitalradish:cooked_radish",
+    "experience": 0.35,
+    "cookingtime": 200
+  }
 }

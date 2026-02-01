@@ -1,7 +1,11 @@
 {
   "type": "minecraft:smoking",
-  "ingredient": { "item": "orbitalradish:radish" },
-  "result": "orbitalradish:cooked_radish",
-  "experience": 0.50,
-  "cookingtime": 100
+  "ingredient": {
+    "item": "orbitalradish:radish"
+  },
+  "result": {
+    "id": "orbitalradish:cooked_radish",
+    "experience": 0.50,
+    "cookingtime": 100
+  }
 }

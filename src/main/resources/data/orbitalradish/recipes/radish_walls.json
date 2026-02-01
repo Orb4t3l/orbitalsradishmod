@@ -8,7 +8,7 @@
     "X": { "item": "orbitalradish:radish_bricks" }
   },
   "result": {
-    "item": "orbitalradish:radish_walls",
+    "id": "orbitalradish:radish_walls",
     "count": 6
   }
 }
