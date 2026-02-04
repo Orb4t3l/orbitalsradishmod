@@ -1,6 +1,9 @@
 package com.orbital.orbitalradish;
 
 import com.orbital.orbitalradish.entity.RadishArrowEntity;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.DeferredRegister;
@@ -19,9 +22,9 @@ public final class ModEntities {
                             .sized(0.5F, 0.5F)
                             .clientTrackingRange(4)
                             .updateInterval(20)
-                            .build("radish_arrow")
+                            .build(ResourceKey.create(Registries.ENTITY_TYPE,
+                                    ResourceLocation.fromNamespaceAndPath(OrbitalRadishMod.MODID, "radish_arrow")))
             );
-
 
     private ModEntities() {}
 }

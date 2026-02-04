@@ -15,6 +15,7 @@ import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -54,7 +55,6 @@ public class OrbitalRadishMod {
     public static final RegistryObject<Item> RADISH_LEAF = ITEMS.register("radish_leaf",
             () -> new Item(new Item.Properties()));
 
-    // FIXED: BowlFoodItem doesn't exist in 1.21 - use regular Item instead
     public static final RegistryObject<Item> RADISH_STEW = ITEMS.register(
             "radish_stew",
             () -> new Item(
@@ -146,11 +146,8 @@ public class OrbitalRadishMod {
     public static final RegistryObject<Item> RADISH_STICK = ITEMS.register("radish_stick",
             () -> new RadishStickItem(new Item.Properties().durability(99999999)));
 
-    public OrbitalRadishMod() {
+    public OrbitalRadishMod(IEventBus modEventBus) {
         LOGGER.info("[DEBUG] Mod constructor started");
-
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        LOGGER.info("[DEBUG] Retrieved mod event bus");
 
         modEventBus.addListener(this::commonSetup);
         LOGGER.info("[DEBUG] Added commonSetup listener");
