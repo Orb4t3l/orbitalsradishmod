@@ -40,7 +40,7 @@ public class OrbitalRadishMod {
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
     public static final RegistryObject<Block> RADISH_CROP = BLOCKS.register("radish_crop",
-            () -> new RadishCrop(BlockBehaviour.Properties.of()
+            () -> new RadishCrop(BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT)
                     .noCollission()
                     .randomTicks()
                     .instabreak()
