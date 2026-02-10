@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.163'
+    id 'net.neoforged.gradle.userdev' version '7.0.165'
 }
 
 group = 'com.orbital'
@@ -15,7 +15,7 @@ def mod_description = 'A basic food mod that adds radishes, radish blocks, a rad
 def mod_authors = 'orbital'
 def mod_license = 'MIT'
 def minecraft_version = '1.21.1'
-def neoforge_version = '21.1.77'
+def neoforge_version = '21.1.80'
 
 base {
     archivesName = mod_id

@@ -1,7 +1,7 @@
 --launchTarget
 forgejunituserdev
 --version
-21.1.77
+21.1.80
 --assetIndex
 asset-index
 --assetsDir
@@ -9,7 +9,7 @@ C:\Users\Trevd\.gradle\caches\minecraft\assets
 --gameDir
 .
 --fml.neoForgeVersion
-21.1.77
+21.1.80
 --fml.fmlVersion
 4.0.31
 --fml.mcVersion
