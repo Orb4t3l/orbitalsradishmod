@@ -13,10 +13,10 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.FarmBlock;
 
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = OrbitalRadishMod.MODID)
 public class RadishAdvancementHandler {
@@ -40,7 +40,7 @@ public class RadishAdvancementHandler {
         if (!(event.getLevel().getBlockState(event.getPos()).getBlock() instanceof FarmBlock)) return;
 
         // Let vanilla place first
-        if (event.getUseItem() == net.minecraftforge.eventbus.api.Event.Result.DENY) return;
+        if (event.getUseItem() == net.neoforged.neoforge.bus.api.Event.Result.DENY) return;
 
         // get manager and the advancement holder (entry)
         ServerAdvancementManager advManager = player.server.getAdvancements();

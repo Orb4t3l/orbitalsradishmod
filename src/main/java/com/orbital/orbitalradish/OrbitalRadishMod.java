@@ -9,20 +9,20 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.slf4j.Logger;
 import com.orbital.orbitalradish.item.RadishStickItem;
 
@@ -33,29 +33,28 @@ public class OrbitalRadishMod {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
-    public static final DeferredRegister<net.minecraft.world.item.CreativeModeTab> CREATIVE_MODE_TABS =
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(Registries.BLOCK, MODID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Registries.ITEM, MODID);
+    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
-    public static final RegistryObject<Block> RADISH_CROP = BLOCKS.register("radish_crop",
+    public static final DeferredHolder<Block, RadishCrop> RADISH_CROP = BLOCKS.register("radish_crop",
             () -> new RadishCrop(BlockBehaviour.Properties.of()
                     .noCollission()
                     .randomTicks()
                     .instabreak()
                     .sound(SoundType.CROP)));
 
-    public static final RegistryObject<Item> COOKED_RADISH = ITEMS.register("cooked_radish",
+    public static final DeferredHolder<Item, Item> COOKED_RADISH = ITEMS.register("cooked_radish",
             () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.4f).build())));
 
-    public static final RegistryObject<Item> RADISH_ARROW = ITEMS.register("radish_arrow",
+    public static final DeferredHolder<Item, com.orbital.orbitalradish.item.RadishArrowItem> RADISH_ARROW = ITEMS.register("radish_arrow",
             () -> new com.orbital.orbitalradish.item.RadishArrowItem(new Item.Properties()));
 
-    public static final RegistryObject<Item> RADISH_LEAF = ITEMS.register("radish_leaf",
+    public static final DeferredHolder<Item, Item> RADISH_LEAF = ITEMS.register("radish_leaf",
             () -> new Item(new Item.Properties()));
 
-    // FIXED: BowlFoodItem doesn't exist in 1.21 - use regular Item instead
-    public static final RegistryObject<Item> RADISH_STEW = ITEMS.register(
+    public static final DeferredHolder<Item, Item> RADISH_STEW = ITEMS.register(
             "radish_stew",
             () -> new Item(
                     new Item.Properties()
@@ -69,44 +68,44 @@ public class OrbitalRadishMod {
             )
     );
 
-    public static final RegistryObject<Block> RADISH_BLOCK = BLOCKS.register("radish_block",
+    public static final DeferredHolder<Block, Block> RADISH_BLOCK = BLOCKS.register("radish_block",
             () -> new Block(BlockBehaviour.Properties.of()
                     .strength(0.5f)
                     .sound(SoundType.GRASS)
                     .mapColor(MapColor.PLANT)));
 
-    public static final RegistryObject<Item> RADISH_BLOCK_ITEM = ITEMS.register("radish_block",
+    public static final DeferredHolder<Item, BlockItem> RADISH_BLOCK_ITEM = ITEMS.register("radish_block",
             () -> new BlockItem(RADISH_BLOCK.get(), new Item.Properties()));
 
-    public static final RegistryObject<Block> DOUBLE_COMPRESSED_RADISH_BLOCK = BLOCKS.register("double_compressed_radish_block",
+    public static final DeferredHolder<Block, Block> DOUBLE_COMPRESSED_RADISH_BLOCK = BLOCKS.register("double_compressed_radish_block",
             () -> new Block(BlockBehaviour.Properties.of()
                     .strength(1.0f)
                     .sound(SoundType.GRASS)
                     .mapColor(MapColor.PLANT)));
 
-    public static final RegistryObject<Item> DOUBLE_COMPRESSED_RADISH_BLOCK_ITEM = ITEMS.register("double_compressed_radish_block",
+    public static final DeferredHolder<Item, BlockItem> DOUBLE_COMPRESSED_RADISH_BLOCK_ITEM = ITEMS.register("double_compressed_radish_block",
             () -> new BlockItem(DOUBLE_COMPRESSED_RADISH_BLOCK.get(), new Item.Properties()));
 
-    public static final RegistryObject<Block> TRIPLE_COMPRESSED_RADISH_BLOCK = BLOCKS.register("triple_compressed_radish_block",
+    public static final DeferredHolder<Block, Block> TRIPLE_COMPRESSED_RADISH_BLOCK = BLOCKS.register("triple_compressed_radish_block",
             () -> new Block(BlockBehaviour.Properties.of()
                     .strength(1.5f)
                     .sound(SoundType.GRASS)
                     .mapColor(MapColor.PLANT)));
 
-    public static final RegistryObject<Item> TRIPLE_COMPRESSED_RADISH_BLOCK_ITEM = ITEMS.register("triple_compressed_radish_block",
+    public static final DeferredHolder<Item, BlockItem> TRIPLE_COMPRESSED_RADISH_BLOCK_ITEM = ITEMS.register("triple_compressed_radish_block",
             () -> new BlockItem(TRIPLE_COMPRESSED_RADISH_BLOCK.get(), new Item.Properties()));
 
-    public static final RegistryObject<Block> RADISH_BRICKS = BLOCKS.register("radish_bricks",
+    public static final DeferredHolder<Block, Block> RADISH_BRICKS = BLOCKS.register("radish_bricks",
             () -> new Block(BlockBehaviour.Properties.of()
                     .strength(2.0f, 6.0f)
                     .sound(SoundType.STONE)
                     .requiresCorrectToolForDrops()
                     .mapColor(MapColor.STONE)));
 
-    public static final RegistryObject<Item> RADISH_BRICKS_ITEM = ITEMS.register("radish_bricks",
+    public static final DeferredHolder<Item, BlockItem> RADISH_BRICKS_ITEM = ITEMS.register("radish_bricks",
             () -> new BlockItem(RADISH_BRICKS.get(), new Item.Properties()));
 
-    public static final RegistryObject<Block> RADISH_STAIRS = BLOCKS.register(
+    public static final DeferredHolder<Block, StairBlock> RADISH_STAIRS = BLOCKS.register(
             "radish_stairs",
             () -> new StairBlock(
                     RADISH_BRICKS.get().defaultBlockState(),
@@ -117,20 +116,20 @@ public class OrbitalRadishMod {
             )
     );
 
-    public static final RegistryObject<Item> RADISH_STAIRS_ITEM = ITEMS.register("radish_stairs",
+    public static final DeferredHolder<Item, BlockItem> RADISH_STAIRS_ITEM = ITEMS.register("radish_stairs",
             () -> new BlockItem(RADISH_STAIRS.get(), new Item.Properties()));
 
-    public static final RegistryObject<Block> RADISH_SLAB = BLOCKS.register("radish_slab",
+    public static final DeferredHolder<Block, SlabBlock> RADISH_SLAB = BLOCKS.register("radish_slab",
             () -> new SlabBlock(
                     BlockBehaviour.Properties.of()
                             .strength(2.0f, 6.0f)
                             .sound(SoundType.STONE)
             ));
 
-    public static final RegistryObject<Item> RADISH_SLAB_ITEM = ITEMS.register("radish_slab",
+    public static final DeferredHolder<Item, BlockItem> RADISH_SLAB_ITEM = ITEMS.register("radish_slab",
             () -> new BlockItem(RADISH_SLAB.get(), new Item.Properties()));
 
-    public static final RegistryObject<Block> RADISH_WALLS = BLOCKS.register(
+    public static final DeferredHolder<Block, WallBlock> RADISH_WALLS = BLOCKS.register(
             "radish_walls",
             () -> new WallBlock(
                     BlockBehaviour.Properties.of()
@@ -140,40 +139,37 @@ public class OrbitalRadishMod {
             )
     );
 
-    public static final RegistryObject<Item> RADISH_WALLS_ITEM = ITEMS.register("radish_walls",
+    public static final DeferredHolder<Item, BlockItem> RADISH_WALLS_ITEM = ITEMS.register("radish_walls",
             () -> new BlockItem(RADISH_WALLS.get(), new Item.Properties()));
 
-    public static final RegistryObject<Item> RADISH_STICK = ITEMS.register("radish_stick",
+    public static final DeferredHolder<Item, RadishStickItem> RADISH_STICK = ITEMS.register("radish_stick",
             () -> new RadishStickItem(new Item.Properties().durability(99999999)));
 
-    public OrbitalRadishMod() {
+    public OrbitalRadishMod(IEventBus modBus) {
         LOGGER.info("[DEBUG] Mod constructor started");
 
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        LOGGER.info("[DEBUG] Retrieved mod event bus");
-
-        modEventBus.addListener(this::commonSetup);
+        modBus.addListener(this::commonSetup);
         LOGGER.info("[DEBUG] Added commonSetup listener");
 
-        BLOCKS.register(modEventBus);
+        BLOCKS.register(modBus);
         LOGGER.info("[DEBUG] Registered BLOCKS");
 
-        ModItems.ITEMS.register(modEventBus);
+        ModItems.ITEMS.register(modBus);
         LOGGER.info("[DEBUG] Registered ITEMS");
 
-        ModEntities.ENTITIES.register(modEventBus);
+        ModEntities.ENTITIES.register(modBus);
         LOGGER.info("[DEBUG] Registered ENTITIES");
 
-        CREATIVE_MODE_TABS.register(modEventBus);
+        CREATIVE_MODE_TABS.register(modBus);
         LOGGER.info("[DEBUG] Registered CREATIVE_MODE_TABS");
 
-        MinecraftForge.EVENT_BUS.register(this);
-        LOGGER.info("[DEBUG] Registered mod to Forge event bus");
+        NeoForge.EVENT_BUS.register(this);
+        LOGGER.info("[DEBUG] Registered mod to NeoForge event bus");
 
-        modEventBus.addListener(this::addCreative);
+        modBus.addListener(this::addCreative);
         LOGGER.info("[DEBUG] Added addCreative listener");
 
-        net.minecraftforge.fml.ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+//        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         LOGGER.info("[DEBUG] Registered config");
 
         LOGGER.info("[DEBUG] Mod constructor finished");
@@ -217,7 +213,7 @@ public class OrbitalRadishMod {
         LOGGER.info("[DEBUG] onServerStarting called");
     }
 
-    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {

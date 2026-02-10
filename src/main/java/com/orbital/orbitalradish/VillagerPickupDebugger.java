@@ -9,9 +9,9 @@
 //import net.minecraft.world.entity.npc.Villager;
 //import net.minecraft.world.item.Item;
 //import net.minecraft.world.item.ItemStack;
-//import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-//import net.minecraftforge.eventbus.api.SubscribeEvent;
-//import net.minecraftforge.fml.common.Mod;
+//import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+//import net.neoforged.neoforge.bus.api.SubscribeEvent;
+//import net.neoforged.neoforge.fml.common.Mod;
 //
 //import java.util.List;
 //

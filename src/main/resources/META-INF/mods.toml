@@ -1,27 +1,24 @@
-# This is the mods.toml file for OrbitalRadishMod
-
-modLoader="javafml" #mandatory
-loaderVersion="[52.1.10,)" #mandatory - Forge 49.0.3 corresponds to Minecraft 1.20.4
-license="MIT" #mandatory
+modLoader="javafml"
+loaderVersion="[4,)"
+license="MIT"
 
 [[mods]]
-modId="orbitalradish" #mandatory
-version="1.0.0" #mandatory - your mod version
-displayName="Orbital's Radish Mod" #mandatory
-authors="orbital" #optional
-description='''A mod I made for my best friend RadishStick''' #mandatory
-displayTest="MATCH_VERSION" #default - warns if client/server versions differ
+modId="orbitalradish"
+version="1.0.0"
+displayName="Orbital's Radish Mod"
+authors="orbital"
+description='''A mod I made for my best friend RadishStick'''
 
 [[dependencies.orbitalradish]]
-modId="forge" #mandatory
-mandatory=true
-versionRange="[52.1.1 ,)" #matches loaderVersion above
+modId="neoforge"
+type="required"
+versionRange="[21.1,)"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.orbitalradish]]
-modId="minecraft" #mandatory
-mandatory=true
-versionRange="[1.21.1,)" #minimum 1.20.4, less than 2.0
+modId="minecraft"
+type="required"
+versionRange="[1.21.1,1.21.2)"
 ordering="NONE"
 side="BOTH"
