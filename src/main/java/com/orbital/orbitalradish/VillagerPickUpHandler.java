@@ -10,10 +10,10 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
 
 import java.util.*;
 
@@ -23,7 +23,7 @@ import java.util.*;
  - Retries periodically for leftover radish ItemEntities on the same ServerLevel.
  - Explicitly removes item entities and notifies nearby players to avoid client ghosting.
  */
-@Mod.EventBusSubscriber(modid = OrbitalRadishMod.MODID)
+@Mod.busSubscriber(modid = OrbitalRadishMod.MODID)
 public class VillagerPickUpHandler {
 
     private static final double SEARCH_RADIUS = 1.5D;     // smaller radius prevents many farmers fighting for one stack

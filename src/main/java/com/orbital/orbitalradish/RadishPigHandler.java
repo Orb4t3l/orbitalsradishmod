@@ -13,10 +13,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.Mob;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
 
 import java.util.Set;
 import java.util.UUID;
@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * - When a pig spawns we add a TemptGoal (radish) at priority 3.
  * - Right-click a pig with a radish -> pig enters love mode and we nudge a nearby in-love pig to meet it.
  */
-@Mod.EventBusSubscriber(modid = OrbitalRadishMod.MODID)
+@Mod.busSubscriber(modid = OrbitalRadishMod.MODID)
 public final class RadishPigHandler {
     private static final int TEMPT_GOAL_PRIORITY = 3;
     private static final double MATE_SEARCH_RADIUS = 8.0D;

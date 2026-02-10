@@ -4,12 +4,12 @@ import com.orbital.orbitalradish.ModEntities;
 import com.orbital.orbitalradish.entity.RadishArrowEntity;
 import com.orbital.orbitalradish.OrbitalRadishMod;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.client.event.EntityRenderersEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = OrbitalRadishMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@Mod.busSubscriber(modid = OrbitalRadishMod.MODID, bus = Mod.busSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientRenderers {
 
     @SubscribeEvent

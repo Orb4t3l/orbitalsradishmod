@@ -3,16 +3,16 @@ package com.orbital.orbitalradish.client;
 import com.orbital.orbitalradish.OrbitalRadishMod;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 
 /**
  * Client-only setup (register cutout/cutout-mipped render layers for transparent blocks).
  * Put this in your client package and ensure the file path matches the package.
  */
-@Mod.EventBusSubscriber(modid = OrbitalRadishMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@Mod.busSubscriber(modid = OrbitalRadishMod.MODID, bus = Mod.busSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class ClientSetup {
 
     private ClientSetup() {}

@@ -11,14 +11,14 @@ import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.server.ServerLifecycleHooks;
 
 import java.util.*;
 
-@Mod.EventBusSubscriber(modid = OrbitalRadishMod.MODID)
+@Mod.busSubscriber(modid = OrbitalRadishMod.MODID)
 public class VillagerReplanter {
 
     private static final int SCAN_INTERVAL_TICKS = 20;
