@@ -1,6 +1,5 @@
 package com.orbital.orbitalradish;
 
-import com.orbital.orbitalradish.block.RadishCrop;
 import com.orbital.orbitalradish.ModItems;
 import com.orbital.orbitalradish.entity.RadishArrowEntity;
 
@@ -9,19 +8,18 @@ import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.ServerAdvancementManager;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.FarmBlock;
+import net.minecraft.world.InteractionResult;
 
-import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber(modid = OrbitalRadishMod.MODID)
+@EventBusSubscriber(modid = OrbitalRadishMod.MODID)
 public class RadishAdvancementHandler {
 
-    // FIXED: Use fromNamespaceAndPath instead of deprecated constructor
     private static final ResourceLocation SEEDY =
             ResourceLocation.fromNamespaceAndPath("minecraft", "husbandry/plant_seed");
 
@@ -39,12 +37,12 @@ public class RadishAdvancementHandler {
         // Must be farmland
         if (!(event.getLevel().getBlockState(event.getPos()).getBlock() instanceof FarmBlock)) return;
 
-        // Let vanilla place first
-        if (event.getUseItem() == net.neoforged.neoforge.bus.api.Event.Result.DENY) return;
+        // In NeoForge, just check if the event was canceled or if we should proceed
+        if (event.isCanceled()) return;
 
         // get manager and the advancement holder (entry)
         ServerAdvancementManager advManager = player.server.getAdvancements();
-        AdvancementHolder advHolder = advManager.get(SEEDY); // returns AdvancementHolder / entry
+        AdvancementHolder advHolder = advManager.get(SEEDY);
         if (advHolder == null) return;
 
         AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advHolder);
@@ -56,7 +54,8 @@ public class RadishAdvancementHandler {
     }
 
     @SubscribeEvent
-    public static void onRadishArrowHit(LivingHurtEvent event) {
+    public static void onRadishArrowHit(LivingDamageEvent.Pre event) {
+        // Use getSource() to get the DamageSource
         if (!(event.getSource().getDirectEntity() instanceof RadishArrowEntity arrow))
             return;
 

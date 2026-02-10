@@ -6,12 +6,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.ItemCost;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
-import net.neoforged.neoforge.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = OrbitalRadishMod.MODID)
+@EventBusSubscriber(modid = OrbitalRadishMod.MODID)
 public class VillagerTradesEventHandler {
 
     @SubscribeEvent
@@ -20,10 +20,8 @@ public class VillagerTradesEventHandler {
         if (event.getType() == VillagerProfession.FARMER) {
 
             // Level 1 farmer trades (novice)
-            List<VillagerTrades.ItemListing> level1Trades =
-                    event.getTrades().get(1);
+            List<VillagerTrades.ItemListing> level1Trades = event.getTrades().get(1);
 
-            // FIXED: In 1.20.6, MerchantOffer uses ItemCost instead of ItemStack for inputs
             level1Trades.add((trader, random) ->
                     new net.minecraft.world.item.trading.MerchantOffer(
                             new ItemCost(ModItems.RADISH.get(), 19),  // Input cost

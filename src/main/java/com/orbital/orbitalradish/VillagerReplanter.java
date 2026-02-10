@@ -11,14 +11,14 @@ import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.event.TickEvent;
-import net.neoforged.neoforge.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.fml.common.Mod;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.*;
 
-@Mod.EventBusSubscriber(modid = OrbitalRadishMod.MODID)
+@EventBusSubscriber(modid = OrbitalRadishMod.MODID)
 public class VillagerReplanter {
 
     private static final int SCAN_INTERVAL_TICKS = 20;
@@ -30,12 +30,10 @@ public class VillagerReplanter {
     private static long tickCounter = 0L;
 
     @SubscribeEvent
-    public static void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
+    public static void onServerTick(ServerTickEvent.Post event) {
         tickCounter++;
         if ((tickCounter % SCAN_INTERVAL_TICKS) != 0) return;
 
-        // decrement cooldowns
         var it = cooldownTicks.entrySet().iterator();
         while (it.hasNext()) {
             var e = it.next();
