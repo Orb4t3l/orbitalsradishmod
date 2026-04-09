@@ -25,10 +25,8 @@ public class RadishItem extends Item {
         Player player = context.getPlayer();
         ItemStack stack = context.getItemInHand();
 
-        // Only plant when clicking the top face of farmland
         if (face != Direction.UP) return InteractionResult.PASS;
 
-        // clicking block must be farmland
         BlockState clickedState = level.getBlockState(clickedPos);
         if (!clickedState.is(Blocks.FARMLAND)) return InteractionResult.PASS;
 
