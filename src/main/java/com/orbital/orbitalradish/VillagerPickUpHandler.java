@@ -31,25 +31,8 @@ public class VillagerPickUpHandler {
     private static final int SCAN_INTERVAL_TICKS = 20;    // once per second
     private static final int ATTEMPTS = Math.max(1, RETRY_SECONDS); // attempts count
     // reflection helper: returns true if the ItemEntity's pickup delay is 0 or less
-    private static boolean isPickupDelayElapsed(net.minecraft.world.entity.item.ItemEntity itemEntity) {
-        try {
-            // try Mojang-style name first
-            java.lang.reflect.Method m = itemEntity.getClass().getMethod("getPickUpDelay");
-            Object val = m.invoke(itemEntity);
-            if (val instanceof Integer) return ((Integer) val) <= 0;
-        } catch (NoSuchMethodException ignored) {}
-        catch (Exception ignored) {}
-
-        try {
-            // try alternative mapping name
-            java.lang.reflect.Method m2 = itemEntity.getClass().getMethod("getPickupDelay");
-            Object val2 = m2.invoke(itemEntity);
-            if (val2 instanceof Integer) return ((Integer) val2) <= 0;
-        } catch (NoSuchMethodException ignored) {}
-        catch (Exception ignored) {}
-
-        // if we couldn't find a getter by reflection, be conservative and assume ready
-        return true;
+    private static boolean isPickupDelayElapsed(ItemEntity itemEntity) {
+        return !itemEntity.hasPickUpDelay();
     }
 
 

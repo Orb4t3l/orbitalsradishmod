@@ -15,7 +15,7 @@ public class RadishArrowEntity extends AbstractArrow {
 
     // Constructor for entity type registration - EntityType FIRST, then Level
     public RadishArrowEntity(EntityType<? extends RadishArrowEntity> type, Level level) {
-        super(type, level);  // AbstractArrow expects (EntityType, Level)
+        super(type, level, new ItemStack(ModItems.RADISH_ARROW.get()), null);
     }
 
     // Constructor with shooter - used when spawning the arrow

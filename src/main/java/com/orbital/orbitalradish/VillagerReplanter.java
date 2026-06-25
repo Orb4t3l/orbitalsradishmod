@@ -68,7 +68,7 @@ public class VillagerReplanter {
                 if (maybeTarget.isEmpty()) continue;
                 BlockPos target = maybeTarget.get();
 
-                level.setBlock(target, OrbitalRadishMod.RADISH_CROP.get().defaultBlockState(), 3);
+                level.setBlock(target, ModBlocks.RADISH_CROP.get().defaultBlockState(), 3);
 
                 ItemStack stack = v.getInventory().getItem(slot);
                 if (!stack.isEmpty()) {

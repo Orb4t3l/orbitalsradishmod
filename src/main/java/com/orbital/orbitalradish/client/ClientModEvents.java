@@ -22,6 +22,6 @@ public class ClientModEvents {
     @SubscribeEvent
     public static void registerRenderers(net.minecraftforge.client.event.EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntities.RADISH_ARROW.get(), RadishArrowRenderer::new);
-        
+
     }
 }

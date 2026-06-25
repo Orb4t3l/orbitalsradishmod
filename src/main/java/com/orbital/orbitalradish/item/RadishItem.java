@@ -36,7 +36,7 @@ public class RadishItem extends Item {
             }
 
             if (!level.isClientSide()) {
-                level.setBlock(targetPos, OrbitalRadishMod.RADISH_CROP.get().defaultBlockState(), 3);
+                level.setBlock(targetPos, ModBlocks.RADISH_CROP.get().defaultBlockState(), 3);
 
                 if (player != null && !player.getAbilities().instabuild) {
                     stack.shrink(1);
