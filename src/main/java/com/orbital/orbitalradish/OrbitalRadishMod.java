@@ -159,36 +159,6 @@ public class OrbitalRadishMod {
     public static final RegistryObject<Item> RADISH_STICK = ITEMS.register("radish_stick",
             () -> new RadishStickItem(new Item.Properties().durability(99999999)));
 
-    public OrbitalRadishMod(IEventBus modEventBus) {
-        LOGGER.info("[DEBUG] Mod constructor started");
-
-        modEventBus.addListener(this::commonSetup);
-        LOGGER.info("[DEBUG] Added commonSetup listener");
-
-        BLOCKS.register(modEventBus);
-        LOGGER.info("[DEBUG] Registered BLOCKS");
-
-        ModItems.ITEMS.register(modEventBus);
-        LOGGER.info("[DEBUG] Registered ITEMS");
-
-        ModEntities.ENTITIES.register(modEventBus);
-        LOGGER.info("[DEBUG] Registered ENTITIES");
-
-        CREATIVE_MODE_TABS.register(modEventBus);
-        LOGGER.info("[DEBUG] Registered CREATIVE_MODE_TABS");
-
-        MinecraftForge.EVENT_BUS.register(this);
-        LOGGER.info("[DEBUG] Registered mod to Forge event bus");
-
-        modEventBus.addListener(this::addCreative);
-        LOGGER.info("[DEBUG] Added addCreative listener");
-
-        net.minecraftforge.fml.ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-        LOGGER.info("[DEBUG] Registered config");
-
-        LOGGER.info("[DEBUG] Mod constructor finished");
-    }
-
     private void commonSetup(final FMLCommonSetupEvent event) {
         LOGGER.info("[DEBUG] commonSetup started");
         LOGGER.info("[DEBUG] commonSetup finished");
