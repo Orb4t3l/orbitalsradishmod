@@ -16,6 +16,7 @@ import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -38,6 +39,18 @@ public class OrbitalRadishMod {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static final DeferredRegister<net.minecraft.world.item.CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
+
+
+    public OrbitalRadishMod(IEventBus modEventBus) {
+        ModBlocks.BLOCKS.register(modEventBus); // move all blocks here
+        ModItems.ITEMS.register(modEventBus);
+        ModEntities.ENTITIES.register(modEventBus);
+        CREATIVE_MODE_TABS.register(modEventBus);
+        modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::addCreative);
+        MinecraftForge.EVENT_BUS.register(this);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+    }
 
     public static final RegistryObject<Block> RADISH_CROP = BLOCKS.register("radish_crop",
             () -> new RadishCrop(BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT)
