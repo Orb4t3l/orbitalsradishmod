@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "orbitalradish",
+  "version": "${version}",
+  "name": "Orbital Radish",
+  "description": "Radish crops, tools and villager integration",
+  "authors": ["Orbital"],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/orbitalradish/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.orbital.orbitalradish.OrbitalRadishMod"],
+    "client": ["com.orbital.orbitalradish.client.OrbitalRadishModClient"]
+  },
+  "mixins": [],
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "minecraft": "1.20.1",
+    "java": ">=17",
+    "fabric-api": "*"
+  }
+}
