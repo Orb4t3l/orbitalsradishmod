@@ -1,7 +1,7 @@
 package com.orbital.orbitalradish.block;
 
 import com.orbital.orbitalradish.ModItems;
-import net.minecraft.world.item.ItemLike;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.CropBlock;
 
 public class RadishCrop extends CropBlock {

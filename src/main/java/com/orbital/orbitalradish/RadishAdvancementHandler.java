@@ -1,7 +1,5 @@
 package com.orbital.orbitalradish;
 
-import com.orbital.orbitalradish.entity.RadishArrowEntity;
-import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -14,7 +12,6 @@ import net.minecraft.world.level.block.FarmBlock;
 public final class RadishAdvancementHandler {
 
     private static final ResourceLocation SEEDY = new ResourceLocation("minecraft", "husbandry/plant_seed");
-    private static final ResourceLocation TAKE_AIM = new ResourceLocation("minecraft", "adventure/shoot_arrow");
 
     public static void init() {
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
@@ -28,28 +25,18 @@ public final class RadishAdvancementHandler {
                 return InteractionResult.PASS;
             }
 
-            awardIfPresent(serverPlayer, SEEDY);
+            Advancement adv = serverPlayer.server.getAdvancements().getAdvancement(SEEDY);
+            if (adv != null) {
+                AdvancementProgress progress = serverPlayer.getAdvancements().getOrStartProgress(adv);
+                if (!progress.isDone()) {
+                    for (String criterion : progress.getRemainingCriteria()) {
+                        serverPlayer.getAdvancements().award(adv, criterion);
+                    }
+                }
+            }
+
             return InteractionResult.PASS;
         });
-
-        ServerLivingEntityEvents.AFTER_DAMAGE.register((entity, source, baseAmount, finalAmount, blocked) -> {
-            if (!(source.getDirectEntity() instanceof RadishArrowEntity arrow)) return;
-            if (!(arrow.getOwner() instanceof ServerPlayer player)) return;
-
-            awardIfPresent(player, TAKE_AIM);
-        });
-    }
-
-    private static void awardIfPresent(ServerPlayer player, ResourceLocation id) {
-        Advancement adv = player.server.getAdvancements().getAdvancement(id);
-        if (adv == null) return;
-
-        AdvancementProgress progress = player.getAdvancements().getOrStartProgress(adv);
-        if (progress.isDone()) return;
-
-        for (String criterion : progress.getRemainingCriteria()) {
-            player.getAdvancements().award(adv, criterion);
-        }
     }
 
     private RadishAdvancementHandler() {

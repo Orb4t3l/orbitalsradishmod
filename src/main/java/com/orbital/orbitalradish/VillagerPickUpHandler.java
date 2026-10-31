@@ -39,15 +39,14 @@ public final class VillagerPickUpHandler {
     public static void init() {
         ServerEntityEvents.ENTITY_LOAD.register((entity, level) -> {
             if (!(entity instanceof ItemEntity itemEntity)) return;
-            if (!(level instanceof ServerLevel serverLevel)) return;
 
             ItemStack stack = itemEntity.getItem();
             if (stack.isEmpty() || !stack.is(ModItems.RADISH)) return;
 
-            boolean transferred = tryTransferToNearbyFarmer(itemEntity, serverLevel);
+            boolean transferred = tryTransferToNearbyFarmer(itemEntity, level);
             if (transferred) return;
 
-            retryMap.put(itemEntity.getUUID(), new RetryEntry(serverLevel, ATTEMPTS));
+            retryMap.put(itemEntity.getUUID(), new RetryEntry(level, ATTEMPTS));
         });
 
         ServerTickEvents.END_SERVER_TICK.register(server -> {
@@ -136,8 +135,6 @@ public final class VillagerPickUpHandler {
         if (itemEntity.isRemoved()) return true;
         ItemStack stack = itemEntity.getItem();
         if (stack.isEmpty()) return true;
-
-        if (itemEntity.getAge() < 0) return false;
 
         var box = itemEntity.getBoundingBox().inflate(SEARCH_RADIUS);
         List<Villager> villagers = level.getEntitiesOfClass(Villager.class, box);

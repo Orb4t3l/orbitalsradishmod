@@ -1,4 +1,4 @@
-package com.orbital.orbitalradish.client.java.com.orbital.orbitalradish.client;
+package com.orbital.orbitalradish.client;
 
 import com.orbital.orbitalradish.ModBlocks;
 import com.orbital.orbitalradish.ModEntities;

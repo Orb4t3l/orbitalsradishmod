@@ -1,4 +1,4 @@
-package com.orbital.orbitalradish.client.java.com.orbital.orbitalradish.client;
+package com.orbital.orbitalradish.client;
 
 import com.orbital.orbitalradish.entity.RadishArrowEntity;
 import net.minecraft.client.renderer.entity.ArrowRenderer;
