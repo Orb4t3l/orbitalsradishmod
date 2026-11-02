@@ -13,5 +13,6 @@ public class RadishArrowRenderer extends ArrowRenderer<RadishArrowEntity> {
 
     @Override
     public ResourceLocation getTextureLocation(RadishArrowEntity entity) {
-        return ResourceLocation.fromNamespaceAndPath("orbitalradish", "textures/entity/projectiles/radish_arrow.png");    }
+        return ResourceLocation.fromNamespaceAndPath("orbitalradish", "textures/entity/projectiles/radish_arrow.png");
+    }
 }

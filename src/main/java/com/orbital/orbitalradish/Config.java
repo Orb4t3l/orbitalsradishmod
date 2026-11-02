@@ -1,66 +1,60 @@
 package com.orbital.orbitalradish;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import net.fabricmc.loader.api.FabricLoader;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-@Mod.EventBusSubscriber(modid = OrbitalRadishMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class Config
-{
-    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+public final class Config {
 
-    private static final ForgeConfigSpec.BooleanValue LOG_DIRT_BLOCK = BUILDER
-            .comment("Whether to log the dirt block on common setup")
-            .define("logDirtBlock", true);
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Path FILE = FabricLoader.getInstance().getConfigDir().resolve("orbitalradish.json");
 
-    private static final ForgeConfigSpec.IntValue MAGIC_NUMBER = BUILDER
-            .comment("A magic number")
-            .defineInRange("magicNumber", 42, 0, Integer.MAX_VALUE);
+    public static boolean logDirtBlock = true;
+    public static int magicNumber = 42;
+    public static String magicNumberIntroduction = "The magic number is... ";
 
-    public static final ForgeConfigSpec.ConfigValue<String> MAGIC_NUMBER_INTRODUCTION = BUILDER
-            .comment("What you want the introduction message to be for the magic number")
-            .define("magicNumberIntroduction", "The magic number is... ");
+    public static void load() {
+        if (!Files.exists(FILE)) {
+            save();
+            return;
+        }
 
-    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> ITEM_STRINGS = BUILDER
-            .comment("A list of items to log on common setup.")
-            .defineList("items", List.of("minecraft:iron_ingot"), Config::validateItemName);
-
-    static final ForgeConfigSpec SPEC = BUILDER.build();
-
-    public static boolean logDirtBlock;
-    public static int magicNumber;
-    public static String magicNumberIntroduction;
-    public static Set<Item> items;
-
-    private static boolean validateItemName(final Object obj) {
-        if (!(obj instanceof String s)) return false;
-        return s.contains(":"); // optional sanity check
+        try (Reader reader = Files.newBufferedReader(FILE, StandardCharsets.UTF_8)) {
+            Data data = GSON.fromJson(reader, Data.class);
+            if (data != null) {
+                logDirtBlock = data.logDirtBlock;
+                magicNumber = data.magicNumber;
+                magicNumberIntroduction = data.magicNumberIntroduction;
+            }
+        } catch (IOException ignored) {
+        }
     }
 
+    public static void save() {
+        Data data = new Data();
+        data.logDirtBlock = logDirtBlock;
+        data.magicNumber = magicNumber;
+        data.magicNumberIntroduction = magicNumberIntroduction;
 
-    @SubscribeEvent
-    static void onLoad(final ModConfigEvent event)
-    {
-        logDirtBlock = LOG_DIRT_BLOCK.get();
-        magicNumber = MAGIC_NUMBER.get();
-        magicNumberIntroduction = MAGIC_NUMBER_INTRODUCTION.get();
+        try (Writer writer = Files.newBufferedWriter(FILE, StandardCharsets.UTF_8)) {
+            GSON.toJson(data, writer);
+        } catch (IOException ignored) {
+        }
+    }
 
-        // convert the list of strings into a set of items (skip invalid entries)
-        items = ITEM_STRINGS.get().stream()
-                .map(itemName -> {
-                    ResourceLocation rl = ResourceLocation.tryParse(itemName);
-                    return rl == null ? null : ForgeRegistries.ITEMS.getValue(rl);
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
+    private static final class Data {
+        boolean logDirtBlock = true;
+        int magicNumber = 42;
+        String magicNumberIntroduction = "The magic number is... ";
+    }
+
+    private Config() {
     }
 }
