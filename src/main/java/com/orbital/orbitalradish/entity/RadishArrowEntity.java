@@ -3,11 +3,11 @@ package com.orbital.orbitalradish.entity;
 import com.orbital.orbitalradish.ModEntities;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -15,7 +15,7 @@ import net.minecraft.world.phys.EntityHitResult;
 
 public class RadishArrowEntity extends AbstractArrow {
 
-    private static final ResourceLocation TAKE_AIM = ResourceLocation.fromNamespaceAndPath("minecraft", "adventure/shoot_arrow");
+    private static final Identifier TAKE_AIM = Identifier.fromNamespaceAndPath("minecraft", "adventure/shoot_arrow");
 
     private ItemStack renderStack = ItemStack.EMPTY;
 

@@ -3,7 +3,7 @@ package com.orbital.orbitalradish.client;
 import com.orbital.orbitalradish.entity.RadishArrowEntity;
 import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RadishArrowRenderer extends ArrowRenderer<RadishArrowEntity> {
 
@@ -12,7 +12,7 @@ public class RadishArrowRenderer extends ArrowRenderer<RadishArrowEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(RadishArrowEntity entity) {
-        return ResourceLocation.fromNamespaceAndPath("orbitalradish", "textures/entity/projectiles/radish_arrow.png");
+    public Identifier getTextureLocation(RadishArrowEntity entity) {
+        return Identifier.fromNamespaceAndPath("orbitalradish", "textures/entity/projectiles/radish_arrow.png");
     }
 }
