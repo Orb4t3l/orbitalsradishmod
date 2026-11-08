@@ -5,6 +5,7 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
@@ -12,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 
 public class RadishArrowEntity extends AbstractArrow {
 
@@ -45,7 +47,7 @@ public class RadishArrowEntity extends AbstractArrow {
         super.onHitEntity(result);
 
         if (this.getOwner() instanceof ServerPlayer player) {
-            AdvancementHolder adv = player.server.getAdvancements().get(TAKE_AIM);
+            AdvancementHolder adv = player.level().getServer().getAdvancements().get(TAKE_AIM);
             if (adv != null) {
                 AdvancementProgress progress = player.getAdvancements().getOrStartProgress(adv);
                 if (!progress.isDone()) {
@@ -55,6 +57,15 @@ public class RadishArrowEntity extends AbstractArrow {
                 }
             }
         }
+    }
+
+    public void setInitialRotationFromMovement() {
+        Vec3 motion = this.getDeltaMovement();
+        double horizontal = motion.horizontalDistance();
+        this.setYRot((float) (Mth.atan2(motion.x, motion.z) * (180D / Math.PI)));
+        this.setXRot((float) (Mth.atan2(motion.y, horizontal) * (180D / Math.PI)));
+        this.yRotO = this.getYRot();
+        this.xRotO = this.getXRot();
     }
 
     @Override

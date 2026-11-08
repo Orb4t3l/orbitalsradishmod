@@ -1,18 +1,17 @@
 package com.orbital.orbitalradish.item;
 
 import com.orbital.orbitalradish.entity.RadishArrowEntity;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -23,25 +22,8 @@ import net.minecraft.world.level.Level;
 public class RadishStickItem extends BowItem {
 
     public RadishStickItem(Properties props) {
-        super(props);  // SET ENCHANTABILITY HERE!
+        super(props);
     }
-
-    // REMOVE THESE - THEY DON'T WORK IN 1.21:
-    // @Override
-    // public int getEnchantmentValue() {
-    //     return 15;
-    // }
-
-    // @Override
-    // public boolean isEnchantable(ItemStack stack) {
-    //     return true;
-    // }
-
-    /* ---------------- ENCHANTING ---------------- */
-
-
-
-    /* ---------------- AMMO ---------------- */
 
     @Override
     public java.util.function.Predicate<ItemStack> getAllSupportedProjectiles() {
@@ -55,22 +37,20 @@ public class RadishStickItem extends BowItem {
         ItemStack off = player.getOffhandItem();
         if (off.is(Items.STICK)) return off;
 
-        NonNullList<ItemStack> inv = player.getInventory().items;
-        for (ItemStack s : inv) {
+        int size = player.getInventory().getContainerSize();
+        for (int i = 0; i < size; i++) {
+            ItemStack s = player.getInventory().getItem(i);
             if (s.is(Items.STICK)) return s;
         }
         return ItemStack.EMPTY;
     }
 
-    /* ---------------- USE ---------------- */
-
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        ItemStack held = player.getItemInHand(hand);
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         boolean hasAmmo = !findAmmo(player).isEmpty() || player.getAbilities().instabuild;
-        if (!hasAmmo) return InteractionResultHolder.fail(held);
+        if (!hasAmmo) return InteractionResult.FAIL;
         player.startUsingItem(hand);
-        return InteractionResultHolder.consume(held);
+        return InteractionResult.CONSUME;
     }
 
     @Override
@@ -78,20 +58,17 @@ public class RadishStickItem extends BowItem {
         return 72000;
     }
 
-    /* ---------------- FIRE ---------------- */
-
-    // Helper method to get enchantment level in 1.21
     private int getEnchantLevel(ItemStack stack, Level level, ResourceKey<Enchantment> enchantmentKey) {
         Holder<Enchantment> holder = level.registryAccess()
-                .registryOrThrow(Registries.ENCHANTMENT)
-                .getHolderOrThrow(enchantmentKey);
+                .lookupOrThrow(Registries.ENCHANTMENT)
+                .getOrThrow(enchantmentKey);
         return stack.getEnchantments().getLevel(holder);
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
-        if (level.isClientSide) return;
-        if (!(entity instanceof Player player)) return;
+    public boolean releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
+        if (level.isClientSide()) return false;
+        if (!(entity instanceof Player player)) return false;
 
         int power = getEnchantLevel(stack, level, Enchantments.POWER);
         int punch = getEnchantLevel(stack, level, Enchantments.PUNCH);
@@ -99,11 +76,11 @@ public class RadishStickItem extends BowItem {
         int infinity = getEnchantLevel(stack, level, Enchantments.INFINITY);
 
         float charge = getPowerForTime(getUseDuration(stack, player) - timeLeft);
-        if (charge < 0.1F) return;
+        if (charge < 0.1F) return false;
 
         ItemStack ammo = findAmmo(player);
         boolean creative = player.getAbilities().instabuild;
-        if (ammo.isEmpty() && !creative) return;
+        if (ammo.isEmpty() && !creative) return false;
 
         if (!creative && infinity == 0 && !ammo.isEmpty()) {
             ammo.shrink(1);
@@ -122,7 +99,6 @@ public class RadishStickItem extends BowItem {
         if (charge >= 1.0F) arrow.setCritArrow(true);
         if (infinity > 0) arrow.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
 
-        // Set velocity based on player's look direction
         float xRot = player.getXRot();
         float yRot = player.getYRot();
         float velocity = charge * 3.0F;
@@ -132,8 +108,10 @@ public class RadishStickItem extends BowItem {
         double vz = Math.cos(Math.toRadians(yRot)) * Math.cos(Math.toRadians(xRot)) * velocity;
 
         arrow.setDeltaMovement(vx, vy, vz);
+        arrow.setInitialRotationFromMovement();
 
         level.addFreshEntity(arrow);
+
 
         level.playSound(null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS,
@@ -145,6 +123,8 @@ public class RadishStickItem extends BowItem {
                     : EquipmentSlot.OFFHAND;
             stack.hurtAndBreak(1, player, slot);
         }
+
+        return true;
     }
 
     public static float getPowerForTime(int drawTime) {
