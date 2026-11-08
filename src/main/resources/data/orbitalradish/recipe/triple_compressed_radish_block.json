@@ -6,7 +6,7 @@
     "XXX"
   ],
   "key": {
-    "X": { "item": "orbitalradish:double_compressed_radish_block" }
+    "X": "orbitalradish:double_compressed_radish_block"
   },
   "result": {
     "id": "orbitalradish:triple_compressed_radish_block",

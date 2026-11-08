@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-    { "item": "orbitalradish:triple_compressed_radish_block" }
+    "orbitalradish:triple_compressed_radish_block"
   ],
   "result": {
     "id": "orbitalradish:double_compressed_radish_block",

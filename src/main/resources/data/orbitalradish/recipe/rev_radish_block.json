@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-    { "item": "orbitalradish:radish_block" }
+    "orbitalradish:radish_block"
   ],
   "result": {
     "id": "orbitalradish:radish",
