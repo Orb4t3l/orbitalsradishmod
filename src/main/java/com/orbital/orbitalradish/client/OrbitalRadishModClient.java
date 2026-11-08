@@ -8,6 +8,7 @@ public class OrbitalRadishModClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        ModBlocksClient.setup();
         EntityRendererRegistry.register(ModEntities.RADISH_ARROW, RadishArrowRenderer::new);
     }
 }
