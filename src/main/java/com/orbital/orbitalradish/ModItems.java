@@ -56,7 +56,7 @@ public final class ModItems {
                 new Item.Properties().stacksTo(64));
 
         RADISH_STICK = register("radish_stick", RadishStickItem::new,
-                new Item.Properties().durability(99999999));
+                new Item.Properties().durability(99999999).enchantable(1));
 
         COOKED_RADISH = register("cooked_radish", Item::new,
                 new Item.Properties().food(
