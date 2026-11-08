@@ -1,38 +1,25 @@
 package com.orbital.orbitalradish;
 
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.entity.npc.VillagerTrades;
+import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.ItemCost;
-import net.minecraftforge.event.village.VillagerTradesEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraft.world.item.trading.MerchantOffer;
 
-import java.util.List;
+public final class VillagerTradesEventHandler {
 
-@Mod.EventBusSubscriber(modid = OrbitalRadishMod.MODID)
-public class VillagerTradesEventHandler {
+    public static void init() {
+        TradeOfferHelper.registerVillagerOffers(VillagerProfession.FARMER, 1, factories ->
+                factories.add((level, trader, random) -> new MerchantOffer(
+                        new ItemCost(ModItems.RADISH, 19),
+                        new ItemStack(Items.EMERALD, 1),
+                        12,
+                        2,
+                        0.05F
+                )));
+    }
 
-    @SubscribeEvent
-    public static void addCustomTrades(VillagerTradesEvent event) {
-
-        if (event.getType() == VillagerProfession.FARMER) {
-
-            // Level 1 farmer trades (novice)
-            List<VillagerTrades.ItemListing> level1Trades =
-                    event.getTrades().get(1);
-
-            // FIXED: In 1.20.6, MerchantOffer uses ItemCost instead of ItemStack for inputs
-            level1Trades.add((trader, random) ->
-                    new net.minecraft.world.item.trading.MerchantOffer(
-                            new ItemCost(ModItems.RADISH.get(), 19),  // Input cost
-                            new ItemStack(Items.EMERALD, 1),          // Output
-                            12,    // max uses
-                            2,     // villager XP
-                            0.05F  // price multiplier
-                    )
-            );
-        }
+    private VillagerTradesEventHandler() {
     }
 }
