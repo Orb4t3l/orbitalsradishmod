@@ -1,3 +1,6 @@
 {
-  "parent": "orbitalradish:block/triple_compressed_radish_block"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "orbitalradish:item/triple_compressed_radish_block"
+  }
 }
