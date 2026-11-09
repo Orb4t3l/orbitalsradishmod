@@ -1,3 +1,6 @@
 {
-  "parent": "orbitalradish:block/radish_wall_inventory"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "orbitalradish:item/radish_bricks"
+  }
 }
