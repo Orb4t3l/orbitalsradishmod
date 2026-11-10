@@ -4,7 +4,7 @@
     "XXX"
   ],
   "key": {
-    "X": { "item": "orbitalradish:radish_bricks" }
+    "X": "orbitalradish:radish_bricks"
   },
   "result": {
     "id": "orbitalradish:radish_slab",
