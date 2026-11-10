@@ -1,6 +1,6 @@
 {
   "type": "minecraft:campfire_cooking",
-  "ingredient": { "item": "orbitalradish:radish" },
+  "ingredient": "orbitalradish:radish",
   "result": { "id": "orbitalradish:cooked_radish" },
   "experience": 0.35,
   "cookingtime": 200
